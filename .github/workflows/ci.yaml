@@ -18,10 +18,10 @@ jobs:
 
         run: |
           cat <<EOF>set_env.sh
-          echo "::set-env name=LOCATION_CHART_YAML::LOCATION_CHART_YAML"
-          echo "::set-env name=FORCE_UPLOAD::FORCE_UPLOAD"
-          echo "::set-env name=S3_BUCKET_NAME::S3_BUCKET_NAME"
-          echo "::set-env name=S3_BUCKET_SUBPATH::S3_BUCKET_SUBPATH"
+          echo "::set-env name=LOCATION_CHART_YAML::$LOCATION_CHART_YAML"
+          echo "::set-env name=FORCE_UPLOAD::$FORCE_UPLOAD"
+          echo "::set-env name=S3_BUCKET_NAME::$S3_BUCKET_NAME"
+          echo "::set-env name=S3_BUCKET_SUBPATH::$S3_BUCKET_SUBPATH"
           EOF
 
           bash set_env.sh
