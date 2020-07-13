@@ -1,0 +1,82 @@
+name: SpaceONE CI
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  initialize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set environment virables
+        env:
+          LOCATION_CHART_YAML: . # optional. for pypi upload
+          FORCE_UPLOAD: true # force upload when the version has already existed.
+          S3_BUCKET_NAME: helm.stargate.spaceone.dev-bucket
+          S3_BUCKET_SUBPATH: charts
+
+        run: |
+          cat <<EOF>set_env.sh
+          echo "::set-env name=LOCATION_CHART_YAML::LOCATION_CHART_YAML"
+          echo "::set-env name=FORCE_UPLOAD::FORCE_UPLOAD"
+          echo "::set-env name=S3_BUCKET_NAME::S3_BUCKET_NAME"
+          echo "::set-env name=S3_BUCKET_SUBPATH::S3_BUCKET_SUBPATH"
+          EOF
+
+          bash set_env.sh
+      - name: save envs
+        uses: actions/upload-artifact@v2
+        with:
+          name: set_env.sh
+          path: set_env.sh
+
+      - run: |
+          cat set_env.sh
+
+  helm:
+    if: github.repository_owner == 'spaceone-dev'
+    needs: initialize
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: set_env.sh
+
+      - name: Set environment variables
+        run: |
+          bash set_env.sh
+
+      - name: Set up Helm3
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+
+      - name: Install Helm S3 Plugin
+        run: |
+          helm plugin install https://github.com/hypnoglow/helm-s3.git
+
+      - name: Lint
+        run: |
+          cd LOCATION_CHART_YAML
+          helm lint .
+      - name: Build
+        run: |
+          cd LOCATION_CHART_YAML
+          helm package .
+
+      - name: [Force] Upload Helm Chart
+        if: env.FORCE_UPLOAD == 'true'
+        id: upload
+        run: |
+          helm repo add spaceone-s3 s3://${{ env.S3_BUCKET_NAME }}/${{ env.S3_BUCKET_SUBPATH }} --force
+
+      - name: Slack
+        if: always()
+        uses: 8398a7/action-slack@v3.2.0
+        with:
+          status: ${{job.status}}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+          author_name: Github Action Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
