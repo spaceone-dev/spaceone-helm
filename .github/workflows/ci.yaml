@@ -73,7 +73,8 @@ jobs:
         if: env.FORCE_UPLOAD == 'true'
         id: upload
         run: |
-          helm repo add spaceone-s3 s3://${{ env.S3_BUCKET_NAME }}/${{ env.S3_BUCKET_SUBPATH }} --force
+          helm repo add spaceone-s3 s3://${{ env.S3_BUCKET_NAME }}/${{ env.S3_BUCKET_SUBPATH }}
+          helm s3 push ./spaceone-*.tgz spaceone-s3 --force
 
       - name: Slack
         if: always()
