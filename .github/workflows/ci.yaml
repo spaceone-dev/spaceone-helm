@@ -65,7 +65,7 @@ jobs:
           cd LOCATION_CHART_YAML
           helm package .
 
-      - name: [Force] Upload Helm Chart
+      - name: Force Upload Helm Chart
         if: env.FORCE_UPLOAD == 'true'
         id: upload
         run: |
