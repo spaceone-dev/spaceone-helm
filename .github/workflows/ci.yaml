@@ -56,6 +56,10 @@ jobs:
         run: |
           helm plugin install https://github.com/hypnoglow/helm-s3.git
 
+      - name: Update Chart Dependencies
+        run: |
+          cd ${{ env.LOCATION_CHART_YAML }}
+          helm dependency update
       - name: Lint
         run: |
           cd ${{ env.LOCATION_CHART_YAML }}
