@@ -44,14 +44,6 @@ jobs:
         with:
           name: set_env.sh
 
-      - name: Time badge
-        uses: RubbaBoy/BYOB@v1.1.0
-        with:
-          NAME: time
-          LABEL: 'Updated at'
-          STATUS: helloworld
-          COLOR: 00EEFF
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set environment variables
         run: |
           bash set_env.sh
