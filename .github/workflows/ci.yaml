@@ -82,6 +82,11 @@ jobs:
         run: |
           helm repo add spaceone-s3 s3://${{ env.S3_BUCKET_NAME }}/${{ env.S3_BUCKET_SUBPATH }}
           helm s3 push ./spaceone-*.tgz spaceone-s3 --force
+      - name: Invalidate CloudFront Cache
+        env:
+          DISTRIBUTE_ID: E1HBD4U9MS0NN8
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ env.DISTRIBUTE_ID }}  --paths "/*"
 
       - name: Slack
         if: always()
