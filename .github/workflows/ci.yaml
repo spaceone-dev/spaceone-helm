@@ -14,14 +14,16 @@ jobs:
           LOCATION_CHART_YAML: . # optional. for pypi upload
           FORCE_UPLOAD: true # force upload when the version has already existed.
           S3_BUCKET_NAME: helm.stargate.spaceone.dev-bucket
-          S3_BUCKET_SUBPATH: charts
+          S3_BUCKET_SUBPATH_CHART: charts
+          S3_BUCKET_SUBPATH_MEDIA: media
 
         run: |
           cat <<EOF>set_env.sh
           echo "::set-env name=LOCATION_CHART_YAML::$LOCATION_CHART_YAML"
           echo "::set-env name=FORCE_UPLOAD::$FORCE_UPLOAD"
           echo "::set-env name=S3_BUCKET_NAME::$S3_BUCKET_NAME"
-          echo "::set-env name=S3_BUCKET_SUBPATH::$S3_BUCKET_SUBPATH"
+          echo "::set-env name=S3_BUCKET_SUBPATH_CHART::$S3_BUCKET_SUBPATH_CHART"
+          echo "::set-env name=S3_BUCKET_SUBPATH_MEDIA::$S3_BUCKET_SUBPATH_MEDIA"
           EOF
 
           bash set_env.sh
@@ -80,8 +82,25 @@ jobs:
         if: env.FORCE_UPLOAD == 'true'
         id: upload
         run: |
-          helm repo add spaceone-s3 s3://${{ env.S3_BUCKET_NAME }}/${{ env.S3_BUCKET_SUBPATH }}
+          helm repo add spaceone-s3 s3://${{ env.S3_BUCKET_NAME }}/${{ env.S3_BUCKET_SUBPATH_CHART }}
           helm s3 push ./spaceone-*.tgz spaceone-s3 --force
+
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '13'
+
+      - name: Install node dependency for makeBadges
+        run: |
+          cd makeBages
+          npm install
+
+      - name: makeBages
+        run: |
+          cd makeBadges
+          node index.js
+          aws cp media/ s3://${{ env.S3_BUCKET_NAME }}/${{ env.S3_BUCKET_SUBPATH_MEDIA }}/
+
       - name: Invalidate CloudFront Cache
         env:
           DISTRIBUTE_ID: E1HBD4U9MS0NN8
