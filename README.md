@@ -1,8 +1,6 @@
-# 🚀 SpaceONE Helm Chart
+# 🚀 SpaceONE Helm Chart ![version_info](https://helm.stargate.spaceone.dev/media/version_info.png)
 
-> a [SpaceONE](https://github.com/spaceone-dev) chart for Helm 3 to deploy it on K8s Cluster.
->
-> Current latest version ![version_info](https://helm.stargate.spaceone.dev/media/version_info.png)
+> a [SpaceONE](https://github.com/spaceone-dev) chart for Helm 3 to deploy it on K8s Cluster. 
 
 Manage your infrastructure with SpaceONE. It doesn't matter what your infrastructure is based on. SpaceONE can handle AWS, GCP, Azure, IDC, ...etc.
 
