@@ -92,7 +92,7 @@ jobs:
 
       - name: Install node dependency for makeBadges
         run: |
-          cd makeBages
+          cd makeBadges
           npm install
 
       - name: makeBages
