@@ -37,7 +37,7 @@ jobs:
           cat set_env.sh
 
   helm:
-#    if: github.repository_owner == 'spaceone-dev'
+    if: github.repository_owner == 'spaceone-dev'
     needs: initialize
     runs-on: ubuntu-latest
     steps:
