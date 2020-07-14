@@ -1,73 +1,109 @@
-# 🌈 Introduction
+# 🚀 SpaceONE Helm Chart
 
-This is SpaceONE Helm Chart. Using this chart, try using SpaceONE service and develop our services with various environments including your local environment.
+> a [SpaceONE](https://github.com/spaceone-dev) chart for Helm 3 to deploy it on K8s Cluster.
+>
+> Current latest version ![version_info](https://helm.stargate.spaceone.dev/media/version_info.png)
 
+Manage your infrastructure with SpaceONE. It doesn't matter what your infrastructure is based on. SpaceONE can handle AWS, GCP, Azure, IDC, ...etc.
 
+![preview](https://helm.stargate.spaceone.dev/media/preview.png)
 
-# ⭐️ How to install
+# ⭐️ Installation
 
-You can install the chart by just overriding some values. By default, you would use AWS SecretManager as your secret manager and it needs aws credentials which can access AWS SecretManager. So you should pass the values when you install or update the chart.
+### Requirements
+
+* `kubefwd` or any environments provided `port-forward`
+* a `Kubernetes` Cluster.(minikube, EKS, ...)
+* Configurations for AWS Credentials in `values.yaml`-`backend.services.secret.awsSecretManagerConnector`
+
+### Commands
+
+> Some initializing codes will be appended soon.
+
+You should input your aws credentials which has permissions for AWS Secret Mananger in `values.yaml`
 
 ```
-$ helm add repository
-$ helm repository update
-$ helm install spaceone . -f values.yaml \
+$ helm repo add spaceone https://helm.stargate.spaceone.dev
+$ helm repo update
+$ helm install sp spaceone/spaceone -f values.yaml
+
+$ sudo kubefwd svc -n default # this command can be replaced with any codes to execute the same job.
+
+# then execute some initializing codes, please.
 ```
 
+You can see the console page via http://console-client
 
+## Usage examples
 
-# Customize SpaceONE - Using custom images
+### 1. Deploy the whole SpaceONE service with this chart.
 
-You can override each image of each service just by updating values.
+What you should do is only to input your aws credentials in `values.yaml`
 
 ```
 # values.yaml
 ...
 backend:
   services:
-    identity:
-      image: FOO/BAR:FOO
+    secret:
+      awsSecretManagerConnector:
+        awsAccessKeyId: PLEASE_INPUT_YOUR_AWS_CREDENTIALS
+        awsSecretAccessKey: PLEASE_INPUT_YOUR_AWS_CREDENTIALS
+        regionName: PLEASE_INPUT_YOUR_AWS_CREDENTIALS
 ```
 
-```
-$ hal update spaceone . -f values.yaml
-```
-
-# Customize SpaceONE - Using your own server
-
-> You might need `kubefwd` which execute convenient port-forwarding in a namespace.
-
-You can connect our SpaceONE cluster to your own server like your local server.
-
-1. Edit your endpoint as you expect.
-2. (Optional) Disable the services that you don't need. This is not a required option because connections are executed based on configurations for endpoints. It doesn't matter that what services you deployed.  
-3. Connect to your cluster by using port-forward through `kubefwd`.
-4. Access to http://console-client with Modern browsers like Chrome or Safari, ...
-
-## Customizing examples - backend micro service
-
-> Supposing that you will develop your own `spaceone.identity` and run it on your own mac. My ip of local mac is 192.168.50.50 and I will use 60061 port for local identity server.
-
-Edit the endpoint for `spaceone.identity`.
+### 2. Deploy this chart with your own SpaceONE micro services.
 
 ```
 # values.yaml
+# Supposing that you run identity service on your local environment.
+...
 backend:
   services:
-    identtiy:
-      enabled: false # Optional.
-      endpoint: 192.168.50.50:60061 # your ip would be here.
-      
+    identity:
+      enabled: false
+      endpoint: PLEASE_INPUT_YOUR_HOST:YOUR_PORT
 ```
 
+### 3. Deploy this chart with your own Databases
+
 ```
-# example codes to run your own spaceone.identity
-$ SPACEONE_PORT=60061 spaceone grpc identity
-
-# port-forward services which are deployed to "default" namespace.
-$ sudo kubefwd svc -n default
+# values.yaml
+# Supposing that you run mongoDB on your local environment.
+...
+mongo:
+  enabled: false
+  username: PLEASE_INPUT_YOUR_USERNAME
+  password: PLEASE_INPUT_YOUR_PASSWORD
+  host: PLEASE_INPUT_YOUR_MONGO_HOST
+  port: PLEASE_INPUT_YOUR_MONGO_PORT
 ```
 
-Then, you can access to http://console-client as the following.
+### 4. Develop your own plugin with this chart
 
-![image-20200708163509125](/Users/mzc01-jsday/Library/Application Support/typora-user-images/image-20200708163509125.png)
+This will be appended soon.
+
+## Development guides
+
+This will be appended soon.
+
+## Configurations
+
+This will be appended soon.
+
+## Release History
+
+- 0.1.0
+  - Initial version.
+
+## Metadata
+
+[@umi0410](https://github.com/umi0410) – bo314@naver.com
+
+## Contributing
+
+1. Fork it (https://github.com/spaceone/spacoene-helm)
+2. Create your branch (`git checkout -b foo`)
+3. Commit your changes
+4. Push to your branch
+5. Create a new Pull Request (https://github.com/spaceone/spaceone-helm)

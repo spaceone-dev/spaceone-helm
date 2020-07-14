@@ -95,11 +95,11 @@ jobs:
           cd makeBadges
           npm install
 
-      - name: makeBages
+      - name: makeBadges
         run: |
           cd makeBadges
           node index.js
-          aws cp media/ s3://${{ env.S3_BUCKET_NAME }}/${{ env.S3_BUCKET_SUBPATH_MEDIA }}/
+          aws s3 cp --recursive media/ s3://${{ env.S3_BUCKET_NAME }}/${{ env.S3_BUCKET_SUBPATH_MEDIA }}/
 
       - name: Invalidate CloudFront Cache
         env:
