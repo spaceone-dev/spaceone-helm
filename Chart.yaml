@@ -1,6 +1,6 @@
 apiVersion: v2
 name: spaceone
-description: A Helm chart for Kubernetes
+description: a Helm chart to deploy SpaceONE on Kubernetes
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -18,7 +18,7 @@ version: 0.1.0
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application.
-appVersion: 1.1
+appVersion: 1.1.0
 
 dependencies:
   - name: vault

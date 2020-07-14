@@ -3,3 +3,6 @@
 charts/
 dev-values.yaml
 spaceone-*.tgz
+makeBadges/
+!makeBadges/index.js
+!makeBadges/package.json
