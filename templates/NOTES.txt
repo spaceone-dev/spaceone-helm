@@ -7,11 +7,11 @@ Thank you for installing SpaceONE Helm Chart.
 2. Copy and paste the following commands to your terminal.
 
 cat << EOF | kubectl apply -f -
-$(kubectl get cm -n {{ .Values.namespace }} initialize-spaceone -o 'go-template={{ `{{index .data "initialize-spaceone.yml"}}` }}')
+$(kubectl get cm -n {{ .Release.Namespace }} initialize-spaceone -o 'go-template={{ `{{index .data "initialize-spaceone.yml"}}` }}')
 EOF
 
 3. Check out if the job has been completed successfully.
 
-kubectl get job -n {{ .Values.namespace }} initialize-spaceone
+kubectl get job -n {{ .Release.Namespace }} initialize-spaceone
 
 4. Access to the k8s service named root.

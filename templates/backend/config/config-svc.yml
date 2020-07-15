@@ -8,7 +8,7 @@ metadata:
     app: config
 
   name: config
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Release.Namespace }}
 spec:
   ports:
     - nodePort: 30058

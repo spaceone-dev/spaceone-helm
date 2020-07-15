@@ -5,7 +5,7 @@ metadata:
   labels:
     app: supervisor
   name: supervisor
-  namespace: '{{ .Values.namespace }}'
+  namespace: '{{ .Release.Namespace }}'
 spec:
   replicas: {{ .Values.supervisor.supervisor.replicas }}
   revisionHistoryLimit: 3

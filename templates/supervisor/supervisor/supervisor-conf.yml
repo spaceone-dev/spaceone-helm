@@ -3,18 +3,18 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: supervisor-conf
-  namespace: '{{ .Values.namespace }}'
+  namespace: '{{ .Release.Namespace }}'
 data:
   supervisor.yml: |
     GLOBAL:
       MAX_WORKERS: 500
       PORT: 50051
       NAME: root
-      HOSTNAME: {{ .Values.namespace }}.svc.cluster.local
+      HOSTNAME: {{ .Release.Namespace }}.svc.cluster.local
       BACKEND: KubernetesConnector
       PLUGIN:
         backend: KubernetesConnector
-        namespace: {{ .Values.namespace }}
+        namespace: {{ .Release.Namespace }}
         start_port: 50051
         end_port: 50052
         headless: true

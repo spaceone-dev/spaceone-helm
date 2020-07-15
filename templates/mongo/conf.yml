@@ -1,13 +1,12 @@
-{{ if .Values.mongo.enabled }}
 # deploy always
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: mongo-conf
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Release.Namespace }}
 data:
   initialize.sh: |
-    sleep 15
+    sleep 8
     echo START SPACEONE INITIALIZE
     cd /root/scripts/
     mkdir init
@@ -673,5 +672,3 @@ data:
         ...
     if __name__ == "__main__":
       unittest.main(testRunner=RichTestRunner)
-
-{{ end}}

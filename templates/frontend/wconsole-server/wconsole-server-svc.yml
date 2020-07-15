@@ -7,7 +7,7 @@ metadata:
   labels:
     app: console-server
   name: console-server
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Release.Namespace }}
 spec:
   ports:
     - port: 80
