@@ -6,7 +6,7 @@ metadata:
   labels:
     app: consul
   name: consul
-  namespace: default
+  namespace: {{ .Values.namespace }}
 spec:
   type: ClusterIP # connect ClusterIP to Nginx Ingress Controller
   ports:

@@ -5,7 +5,7 @@ metadata:
   labels:
     app: mongo
   name: mongo
-  namespace: {{ .Values.namesapce }}
+  namespace: {{ .Values.namespace }}
 spec:
   replicas: {{ .Values.backend.replicas }}
   revisionHistoryLimit: {{ .Values.backend.revisionHistoryLimit | int }}

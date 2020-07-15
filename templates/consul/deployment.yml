@@ -5,7 +5,7 @@ metadata:
   name: consul
   labels:
     app: consul
-  namespace: default
+  namespace: {{ .Values.namespace }}
 spec:
   replicas: 1 # multiple pod for minimum HA
   selector:
