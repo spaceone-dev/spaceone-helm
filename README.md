@@ -1,8 +1,10 @@
 # 🚀 SpaceONE Helm Chart ![version_info](https://helm.stargate.spaceone.dev/media/version_info.png)
 
-> a [SpaceONE](https://github.com/spaceone-dev) chart for Helm 3 to deploy it on K8s Cluster. 
+> a [SpaceONE](https://github.com/spaceone-dev) chart for Helm 3 to deploy [SpaceONE](https://github.com/spaceone-dev) on K8s Cluster. 
 
-Manage your infrastructure with SpaceONE. It doesn't matter what your infrastructure is based on. SpaceONE can handle AWS, GCP, Azure, IDC, ...etc.
+Manage your infrastructure with SpaceONE.
+It doesn't matter what your infrastructure is based on.
+SpaceONE supports AWS, GCP, Azure, IDC, ...etc.
 
 ![preview](https://helm.stargate.spaceone.dev/media/preview.png)
 
@@ -18,7 +20,7 @@ Manage your infrastructure with SpaceONE. It doesn't matter what your infrastruc
 
 > Some initializing codes will be appended soon.
 
-You should input your aws credentials which has permissions for AWS Secret Mananger in `values.yaml`
+You should input your aws credentials which have permissions for AWS Secret Mananger in `values.yaml`
 
 ```
 $ helm repo add spaceone https://helm.stargate.spaceone.dev
@@ -26,9 +28,13 @@ $ helm repo update
 $ helm install sp spaceone/spaceone -f values.yaml
 
 $ sudo kubefwd svc -n default # this command can be replaced with any codes to execute the same job.
-
-# then execute some initializing codes, please.
 ```
+
+👽 After deploying SpaceONE chart, you should create a Kubernetes `Job` to initialize data. You can see the manifest for the `Job` by the following commands.
+```
+helm get notes sp
+# OR replace sp with your release name.
+``` 
 
 You can see the console page via http://console-client
 
