@@ -1,8 +1,7 @@
-{{ if .Values.mongo.initialize }}
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: init-db-{{ randAlphaNum 5 | lower }}
+  name: initialize-spaceone
   namespace: {{ .Values.namespace }}
   labels:
   annotations:
@@ -38,4 +37,3 @@ spec:
         - name: mongo-conf
           configMap:
             name: mongo-conf
-{{ end }}
