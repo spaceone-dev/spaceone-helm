@@ -7,3 +7,6 @@ spaceone-*.tgz
 makeBadges/*
 !makeBadges/index.js
 !makeBadges/package.json
+
+editIndexYaml/
+!editIndexYaml/index.js

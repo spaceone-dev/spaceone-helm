@@ -20,7 +20,7 @@ spec:
         command:
           - sh
           - -c
-          - sleep 6 && mongo --host {{ .Values.mongo.host }}:{{ .Values.mongo.port }} --username {{ .Values.mongo.username }} --password {{ .Values.mongo.password }} < /root/scripts/init-db.js
+          - sleep 8 && mongo --host {{ .Values.mongo.host }}:{{ .Values.mongo.port }} --username {{ .Values.mongo.username }} --password {{ .Values.mongo.password }} < /root/scripts/init-db.js
         volumeMounts:
           - mountPath: /root/scripts/init-db.js
             name: mongo-conf

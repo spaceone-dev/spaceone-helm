@@ -1,0 +1,5 @@
+const fs = require("fs")
+let index = fs.readFileSync("index.yaml", "utf-8")
+console.log(index)
+index = index.replace(/- s3:\/\//gi, "- https://")
+fs.writeFileSync("index.yaml", index)
