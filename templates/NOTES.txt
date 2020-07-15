@@ -1,3 +1,17 @@
 Thank you for installing SpaceONE Helm Chart.
 
-# How to initiate
+# How to initialize SpaceONE
+
+1. Wait for microservices to get ready.
+
+2. Copy and paste the following commands to your terminal.
+
+cat << EOF | kubectl apply -f -
+$(kubectl get cm -n {{ .Values.namespace }} initialize-spaceone -o 'go-template={{ `{{index .data "initialize-spaceone.yml"}}` }}')
+EOF
+
+3. Check out if the job has been completed successfully.
+
+kubectl get job -n {{ .Values.namespace }} initialize-spaceone
+
+4. Access to the k8s service named root.
