@@ -5,7 +5,6 @@ kind: Deployment
 metadata:
   labels:
     app: console-client
-    environment: development
   name: console-client
   namespace: {{ .Values.namespace }}
 spec:
@@ -21,7 +20,6 @@ spec:
         spaceone.auto-deploy-flag: {{ include (print $.Template.BasePath "/frontend/wconsole-client/wconsole-client-spa-conf.yml") . | sha256sum }}
       labels:
         app: console-client
-        environment: development
     spec:
       terminationGracePeriodSeconds: {{ .Values.gracePeriod }}
       containers:

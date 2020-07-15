@@ -16,7 +16,27 @@ spec:
       nodePort: 32374
   selector:
     app: console-client
-    environment: development
+  sessionAffinity: None
+  type: NodePort
+
+---
+# this service let you access to http://root by kubefwd
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+  labels:
+    app: console-client
+  name: root
+  namespace: {{ .Values.namespace }}
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+      nodePort: 31761
+  selector:
+    app: console-client
   sessionAffinity: None
   type: NodePort
 {{ end }}
