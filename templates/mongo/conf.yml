@@ -7,14 +7,42 @@ metadata:
   namespace: {{ .Values.namespace }}
 data:
   initialize.sh: |
-    pwd
+    sleep 10
     echo START SPACEONE INITIALIZE
     cd /root/scripts/
-    pwd
-    ls
-    chmod -R 777 /root
+    mkdir init
+    mkdir plugin
+    mkdir schema
+
+    # configmap directory is read only file system
+    # so we copy this to each directory
+
+    cp configmap/config.yml init/config.yml
+    cp configmap/init-scenario.json init/scenario.json
+    cp configmap/test_DomainOwner.py init/test_DomainOwner.py
+
+    cp configmap/config.yml plugin/config.yml
+    cp configmap/plugin-scenario.json plugin/scenario.json
+    cp configmap/test_add_new_plugin.py plugin/test_add_new_plugin.py
+
+    cp configmap/config.yml schema/config.yml
+    cp configmap/schema-scenario.json schema/scenario.json
+    cp configmap/test_add_new_schema.py schema/test_add_new_schema.py
+
     pip install --upgrade spaceone-api spaceone-tester spaceone-identity spaceone-core
-    spaceone test -s scenario.json -c config.yml
+
+    cd init
+    spaceone test
+    cd ..
+
+    cd plugin
+    spaceone test
+    cd ..
+
+    cd schema
+    spaceone test
+    cd ..
+
     echo FINISH SPACEONE INITIALIZE
 
   init-db.js: |
@@ -102,34 +130,79 @@ data:
         statistics:
           v1: {{ .Values.backend.services.statistics.endpoint }}
 
-  scenario.json: |
+  init-scenario.json: |
     {
-      "options": {
-          "update_mode": false,
-          "terminate": false,
-          "update_supervisor_token": true
-      },
-      "consul": {
-          "host": "{{ .Values.consul.host }}",
-          "env": "debug"
-      },
-      "domain": {
-          "domain": {"name": "root"},
-          "domainOwner": {"owner_id": "admin", "password": "admin"},
-          "users": [
-              {"user_id": "supervisor", "password": "supervisor-password"}
-          ],
-          "api_key_users": [
-              {"user_id": "supervisor"}
-          ],
-          "local_repository": {
-              "name":"root",
-              "repository_type": "local"
-          }
-      }
+        "options": {
+            "update_mode": false,
+            "terminate": false,
+            "update_supervisor_token": true
+        },
+        "consul": {
+            "host": "consul",
+            "env": "debug"
+        },
+        "domain": {
+            "domain": {"name": "root"},
+            "domainOwner": {"owner_id": "admin", "password": "admin"},
+            "users": [
+                {"user_id": "supervisor", "password": "supervisor-password"}
+            ],
+            "api_key_users": [
+                {"user_id": "supervisor"}
+            ],
+            "local_repository": {
+                    "name":"root",
+                    "repository_type": "local"
+                    }
+        }
     }
 
-  _add_new_plugin.py: |
+  plugin-scenario.json: |
+    {
+        "options": {
+            "update_mode": true,
+            "terminate": false,
+            "update_supervisor_token": false
+        },
+        "consul": {
+            "host": "consul",
+            "env": "debug"
+        },
+        "domain": {
+            "domain": {"name": "root"},
+            "domainOwner": {"owner_id": "admin", "password": "admin"},
+            "users": [
+                {"user_id": "supervisor", "password": "supervisor-password"}
+            ],
+            "api_key_users": [
+                {"user_id": "supervisor"}
+            ]
+        }
+    }
+  schema-scenario.json: |
+    {
+        "options": {
+            "update_mode": true,
+            "terminate": false,
+            "update_supervisor_token": false
+        },
+        "consul": {
+            "host": "consul",
+            "env": "debug"
+        },
+        "domain": {
+            "domain": {"name": "root"},
+            "domainOwner": {"owner_id": "admin", "password": "admin"},
+            "users": [
+                {"user_id": "supervisor", "password": "supervisor-password"}
+            ],
+            "api_key_users": [
+                {"user_id": "supervisor"}
+            ]
+        }
+    }
+
+  test_add_new_plugin.py: |
     import os
     import uuid
     import unittest
@@ -285,11 +358,6 @@ data:
                     }
         }
     }
-
-
-
-
-
     class TestRepository(TestCase):
 
         def _create_plugin(self, params):
@@ -309,8 +377,9 @@ data:
                 self._create_plugin(plugin_param)
 
     if __name__ == "__main__":
+        unittest.main(testRunner=RichTestRunner)
 
-  _add_new_schema.py: |
+  test_add_new_schema.py: |
     import os
     import uuid
     import unittest
@@ -594,33 +663,6 @@ data:
     if __name__ == "__main__":
         unittest.main(testRunner=RichTestRunner)
 
-  _list_repo.py: |
-    import os
-    import uuid
-    import unittest
-    import random
-
-    from langcodes import Language
-
-    from spaceone.core.utils import random_string
-    from spaceone.core.unittest.runner import RichTestRunner
-    from spaceone.core.pygrpc.message_type import *
-
-    from spaceone.tester import TestCase, print_json
-
-    class TestRepository(TestCase):
-
-        def list_repositories(self):
-            param = {}
-            repositories = self.repository.Repository.list(param, metadata=self.meta)
-            print_json(repositories)
-
-        def test_all(self):
-            self.list_repositories()
-
-
-    if __name__ == "__main__":
-        unittest.main(testRunner=RichTestRunner)
   test_DomainOwner.py: |
     import unittest
     from spaceone.core.unittest.runner import RichTestRunner
