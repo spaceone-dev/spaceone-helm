@@ -10,6 +10,7 @@ gracePeriod: 3
 
 mongo:
   enabled: true
+  initialize: true
   image: mongo
   imagePullPolicy: IfNotPresent
   username: mongouser

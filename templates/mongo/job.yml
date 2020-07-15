@@ -1,42 +1,63 @@
 {{ if eq .Release.Revision 1 }}
+{{ if .Values.mongo.initialize }}
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: init-db
+  name: init-db-{{ randAlphaNum 5 | lower }}
   namespace: {{ .Values.namespace }}
   labels:
-    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
-    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
 spec:
   activeDeadlineSeconds: 300
   template:
     metadata:
       name: "{{ .Release.Name }}"
       labels:
-        app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
-        app.kubernetes.io/instance: {{ .Release.Name | quote }}
-        helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     spec:
       restartPolicy: OnFailure
       containers:
-      - name: init-db
-        image: {{ .Values.mongo.image }}
-#        command: ["/bin/bash", "-c", "/bin/sleep {{ default 10 .Values.sleepyTime }} && echo hello world"]
-        #        - name: init-data-temp
-        #          image: mongo
-        #          rest
+      - name: db
+        image: {{ .Values.mongo.image}}
         command:
           - sh
           - -c
-          - sleep 10s && mongo --host {{ .Values.mongo.host }}:{{ .Values.mongo.port }} --username {{ .Values.mongo.username }} --password {{ .Values.mongo.password }} < /app/scripts/init-db.js
+          - sleep 10 && mongo --host {{ .Values.mongo.host }}:{{ .Values.mongo.port }} --username {{ .Values.mongo.username }} --password {{ .Values.mongo.password }} < /root/scripts/init-db.js
         volumeMounts:
-          - mountPath: /app/scripts/init-db.js
+          - mountPath: /root/scripts/init-db.js
             name: mongo-conf
             subPath: init-db.js
+
+      - name: initialize
+        image: {{ .Values.backend.services.identity.image }}
+        command:
+          - sh
+          - /root/scripts/initialize.sh
+        volumeMounts:
+          - mountPath: /root/scripts/initialize.sh
+            name: mongo-conf
+            subPath: initialize.sh
+          - mountPath: /root/scripts/config.yml
+            name: mongo-conf
+            subPath: config.yml
+          - mountPath: /root/scripts/scenario.json
+            name: mongo-conf
+            subPath: scenario.json
+          - mountPath: /root/scripts/_add_new_plugin.py
+            name: mongo-conf
+            subPath: _add_new_plugin.py
+          - mountPath: /root/scripts/_add_new_schema.py
+            name: mongo-conf
+            subPath: _add_new_schema.py
+          - mountPath: /root/scripts/_list_repo.py
+            name: mongo-conf
+            subPath: _list_repo.py
+          - mountPath: /root/scripts/test_DomainOwner.py
+            name: mongo-conf
+            subPath: test_DomainOwner.py
       volumes:
         - name: mongo-conf
           configMap:
+            defaultMode: 0777
             name: mongo-conf
+{{ end }}
 {{ end }}
