@@ -131,10 +131,10 @@ supervisor:
 #######
 # Vault reference : https://www.vaultproject.io/docs/platform/k8s/helm/configuration
 #######
-vault:
-  global:
-    enabled: true
-  server:
-    dev:
-      enabled: true
-  name: hello
+#vault:
+#  global:
+#    enabled: true
+#  server:
+#    dev:
+#      enabled: true
+#  name: hello
