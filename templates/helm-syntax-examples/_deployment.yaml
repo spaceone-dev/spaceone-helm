@@ -4,6 +4,7 @@ kind: Deployment
 metadata:
   name: {{ include "spaceone.fullname" . }}
   labels:
+{{ include "spaceone.labels" . | indent 4 }}
     {{- include "spaceone.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
@@ -13,6 +14,7 @@ spec:
   template:
     metadata:
       labels:
+{{ include "spaceone.labels" . | indent 8 }}
         {{- include "spaceone.selectorLabels" . | nindent 8 }}
     spec:
     {{- with .Values.imagePullSecrets }}

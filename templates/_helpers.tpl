@@ -41,6 +41,7 @@ helm.sh/chart: {{ include "spaceone.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{/*
@@ -64,7 +65,7 @@ Create the name of the service account to use
 
 
 {{ define "default-labels" }}
-app: {{ .appName }}
+helm.stargate.spaceone.dev/service: {{ .appName }}
 author: {{ .Values.installedBy.author }}
 {{ end }}
 

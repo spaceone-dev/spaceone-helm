@@ -5,16 +5,18 @@ metadata:
   name: redis
   namespace: {{ .Release.Namespace }}
   labels:
-    app: redis
+{{ include "spaceone.labels" . | indent 4 }}
+    helm.stargate.spaceone.dev/service: redis
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: redis
+      helm.stargate.spaceone.dev/service: redis
   template:
     metadata:
       labels:
-        app: redis
+{{ include "spaceone.labels" . | indent 8 }}
+        helm.stargate.spaceone.dev/service: redis
     spec:
       terminationGracePeriodSeconds: {{ .Values.gracePeriod }}
       containers:
@@ -40,6 +42,7 @@ metadata:
   name: redis
   namespace: {{ .Release.Namespace }}
   labels:
+{{ include "spaceone.labels" . | indent 4 }}
     run: redis
 spec:
   type: NodePort
@@ -49,5 +52,5 @@ spec:
     nodePort: 31357
     protocol: TCP
   selector:
-    app: redis
+    helm.stargate.spaceone.dev/service: redis
 {{ end }}

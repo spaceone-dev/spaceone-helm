@@ -4,7 +4,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: statistics-scheduler
+{{ include "spaceone.labels" . | indent 4 }}
+    helm.stargate.spaceone.dev/service: statistics-scheduler
+    helm.stargate.spaceone.dev/need_initialization: "true"
   name: statistics-scheduler
   namespace: {{ .Release.Namespace }}
 spec:
@@ -12,14 +14,15 @@ spec:
   revisionHistoryLimit: 3
   selector:
     matchLabels:
-      app: statistics-scheduler
+      helm.stargate.spaceone.dev/service: statistics-scheduler
   template:
     metadata:
       annotations:
-        spaceone.statistics.date: temp-spaceone-data-annotation
         spaceone.auto-deploy-flag: {{ include (print $.Template.BasePath "/backend/statistics-scheduler/statistics-scheduler-conf.yml") . | sha256sum }}
       labels:
-        app: statistics-scheduler
+{{ include "spaceone.labels" . | indent 8 }}
+        helm.stargate.spaceone.dev/service: statistics-scheduler
+        helm.stargate.spaceone.dev/need_initialization: "true"
     spec:
       terminationGracePeriodSeconds: {{ .Values.gracePeriod }}
       containers:

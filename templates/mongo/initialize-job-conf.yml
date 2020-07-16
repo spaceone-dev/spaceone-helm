@@ -9,4 +9,4 @@ data:
   # kubectl get cm initialize-spaceone-conf -o 'go-template={{ `{{index .data "initialize-spaceone.yml"}}` }}'
   # and can apply the output
   initialize-spaceone.yml: |
-{{ tpl (.Files.Get "files/initialize-spaceone.yml") . | indent 4}}
+{{ tpl (.Files.Get "files/initialize-spaceone.yml") . | indent 4 }}

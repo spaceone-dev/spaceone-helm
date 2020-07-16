@@ -4,7 +4,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: config
+{{ include "spaceone.labels" . | indent 4 }}
+    helm.stargate.spaceone.dev/service: config
   name: config
   namespace: {{ .Release.Namespace }}
 spec:
@@ -12,14 +13,15 @@ spec:
   revisionHistoryLimit: 3
   selector:
     matchLabels:
-      app: config
+      helm.stargate.spaceone.dev/service: config
   template:
     metadata:
       annotations:
-        spaceone.config.date: temp-spaceone-data-annotation
         spaceone.auto-deploy-flag: {{ include (print $.Template.BasePath "/backend/identity/identity-conf.yml") . | sha256sum }}
       labels:
-        app: config
+{{ include "spaceone.labels" . | indent 8 }}
+        helm.stargate.spaceone.dev/service: config
+{{ include "spaceone.labels" . | indent 8}}
     spec:
       terminationGracePeriodSeconds: {{ .Values.gracePeriod }}
       containers:

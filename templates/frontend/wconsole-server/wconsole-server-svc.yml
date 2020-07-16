@@ -5,7 +5,8 @@ kind: Service
 metadata:
   annotations:
   labels:
-    app: console-server
+{{ include "spaceone.labels" . | indent 4 }}
+    helm.stargate.spaceone.dev/service: console-server
   name: console-server
   namespace: {{ .Release.Namespace }}
 spec:
@@ -15,7 +16,7 @@ spec:
       targetPort: 80
       nodePort: 31760
   selector:
-    app: console-server
+    helm.stargate.spaceone.dev/service: console-server
   sessionAffinity: None
   type: NodePort
 {{ end }}

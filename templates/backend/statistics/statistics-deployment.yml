@@ -4,7 +4,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: statistics
+{{ include "spaceone.labels" . | indent 4 }}
+    helm.stargate.spaceone.dev/service: statistics
   name: statistics
   namespace: {{ .Release.Namespace }}
 spec:
@@ -12,14 +13,14 @@ spec:
   revisionHistoryLimit: 3
   selector:
     matchLabels:
-      app: statistics
+      helm.stargate.spaceone.dev/service: statistics
   template:
     metadata:
       annotations:
-        spaceone.statistics.date: temp-spaceone-data-annotation
         spaceone.auto-deploy-flag: {{ include (print $.Template.BasePath "/backend/statistics/statistics-conf.yml") . | sha256sum }}
       labels:
-        app: statistics
+{{ include "spaceone.labels" . | indent 8 }}
+        helm.stargate.spaceone.dev/service: statistics
     spec:
       terminationGracePeriodSeconds: {{ .Values.gracePeriod }}
       containers:

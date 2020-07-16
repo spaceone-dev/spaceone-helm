@@ -5,7 +5,8 @@ kind: Service
 metadata:
   annotations:
   labels:
-    app: inventory
+{{ include "spaceone.labels" . | indent 4 }}
+    helm.stargate.spaceone.dev/service: inventory
   name: inventory
   namespace: {{ .Release.Namespace }}
 spec:
@@ -14,7 +15,7 @@ spec:
       port: 50051
       protocol: TCP
   selector:
-    app: inventory
+    helm.stargate.spaceone.dev/service: inventory
   sessionAffinity: None
   type: NodePort
 {{ end }}

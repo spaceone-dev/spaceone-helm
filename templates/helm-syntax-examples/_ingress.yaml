@@ -12,6 +12,7 @@ kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
+{{ include "spaceone.labels" . | indent 4 }}
     {{- include "spaceone.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:

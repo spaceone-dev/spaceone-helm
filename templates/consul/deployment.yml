@@ -4,17 +4,19 @@ kind: Deployment
 metadata:
   name: consul
   labels:
-    app: consul
+{{ include "spaceone.labels" . | indent 4 }}
+    helm.stargate.spaceone.dev/service: consul
   namespace: {{ .Release.Namespace }}
 spec:
   replicas: 1 # multiple pod for minimum HA
   selector:
     matchLabels:
-      app: consul
+      helm.stargate.spaceone.dev/service: consul
   template:
     metadata:
       labels:
-        app: consul
+{{ include "spaceone.labels" . | indent 8 }}
+        helm.stargate.spaceone.dev/service: consul
     spec:
       volumes:
       - name: consul-data

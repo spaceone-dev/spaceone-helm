@@ -3,7 +3,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: supervisor
+{{ include "spaceone.labels" . | indent 4 }}
+    helm.stargate.spaceone.dev/service: supervisor
   name: supervisor
   namespace: '{{ .Release.Namespace }}'
 spec:
@@ -11,14 +12,15 @@ spec:
   revisionHistoryLimit: 3
   selector:
     matchLabels:
-      app: supervisor
+      helm.stargate.spaceone.dev/service: supervisor
   template:
     metadata:
       annotations:
 #        spaceone.supervisor.date: ${new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z").format(new java.util.Date())}
         spaceone.auto-deploy-flag: {{ include (print $.Template.BasePath "/supervisor/supervisor/supervisor-conf.yml") . | sha256sum }}
       labels:
-        app: supervisor
+{{ include "spaceone.labels" . | indent 8 }}
+        helm.stargate.spaceone.dev/service: supervisor
     spec:
       terminationGracePeriodSeconds: {{ .Values.gracePeriod }}
       serviceAccountName: supervisor

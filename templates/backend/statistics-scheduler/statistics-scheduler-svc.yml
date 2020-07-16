@@ -5,7 +5,8 @@ kind: Service
 metadata:
   annotations:
   labels:
-    app: statistics-scheduler
+{{ include "spaceone.labels" . | indent 4 }}
+    helm.stargate.spaceone.dev/service: statistics-scheduler
   name: statistics-scheduler
   namespace: {{ .Release.Namespace }}
 spec:
@@ -14,7 +15,7 @@ spec:
       port: 50051
       protocol: TCP
   selector:
-    app: statistics-scheduler
+    helm.stargate.spaceone.dev/service: statistics-scheduler
   sessionAffinity: None
   type: NodePort
 {{ end }}

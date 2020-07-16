@@ -5,7 +5,8 @@ kind: Service
 metadata:
   annotations:
   labels:
-    app: repository
+{{ include "spaceone.labels" . | indent 4 }}
+    helm.stargate.spaceone.dev/service: repository
   name: repository
   namespace: {{ .Release.Namespace }}
 spec:
@@ -14,7 +15,7 @@ spec:
       port: 50051
       protocol: TCP
   selector:
-    app: repository
+    helm.stargate.spaceone.dev/service: repository
   sessionAffinity: None
   type: NodePort
 {{ end }}

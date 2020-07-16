@@ -4,13 +4,16 @@ metadata:
   name: initialize-spaceone
   namespace: {{ .Release.Namespace }}
   labels:
-  annotations:
+    helm.stargate.spaceone.dev/service: mongo
+{{ include "spaceone.labels" . | indent 4 }}
 spec:
   activeDeadlineSeconds: 300
   template:
     metadata:
       name: "{{ .Release.Name }}"
       labels:
+        helm.stargate.spaceone.dev/service: mongo
+{{ include "spaceone.labels" . | indent 8 }}
     spec:
       restartPolicy: OnFailure
       containers:

@@ -4,6 +4,7 @@ kind: Service
 metadata:
   name: {{ include "spaceone.fullname" . }}
   labels:
+{{ include "spaceone.labels" . | indent 4 }}
     {{- include "spaceone.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}

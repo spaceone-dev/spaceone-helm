@@ -3,7 +3,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: mongo
+{{ include "spaceone.labels" . | indent 4 }}
+    helm.stargate.spaceone.dev/service: mongo
   name: mongo
   namespace: {{ .Release.Namespace }}
 spec:
@@ -11,14 +12,14 @@ spec:
   revisionHistoryLimit: {{ .Values.backend.revisionHistoryLimit | int }}
   selector:
     matchLabels:
-      app: mongo
+      helm.stargate.spaceone.dev/service: mongo
   template:
     metadata:
       annotations:
         spaceone.auto-deploy-flag: {{ include (print $.Template.BasePath "/mongo/conf.yml") . | sha256sum }}
-#        spaceone.identity.date: temp-spaceone-data-annotation
       labels:
-        app: mongo
+{{ include "spaceone.labels" . | indent 8 }}
+        helm.stargate.spaceone.dev/service: mongo
     spec:
       terminationGracePeriodSeconds: {{ .Values.gracePeriod }}
       containers:

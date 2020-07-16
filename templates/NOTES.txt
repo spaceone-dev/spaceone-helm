@@ -2,7 +2,9 @@ Thank you for installing SpaceONE Helm Chart.
 
 # How to initialize SpaceONE
 
-1. Wait for microservices to get ready.
+1. Wait for microservices to get ready. (except for the microservices which need initialization)
+
+kubectl get pod -n {{ .Release.Namespace }} -l "helm.stargate.spaceone.dev/need_initialization!=true"
 
 2. Copy and paste the following commands to your terminal.
 

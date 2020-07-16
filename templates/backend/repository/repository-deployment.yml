@@ -4,7 +4,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: repository
+{{ include "spaceone.labels" . | indent 4 }}
+    helm.stargate.spaceone.dev/service: repository
   name: repository
   namespace: {{ .Release.Namespace }}
 spec:
@@ -12,14 +13,14 @@ spec:
   revisionHistoryLimit: 3
   selector:
     matchLabels:
-      app: repository
+      helm.stargate.spaceone.dev/service: repository
   template:
     metadata:
       annotations:
-        spaceone.repository.date: temp-spaceone-data-annotation
         spaceone.auto-deploy-flag: {{ include (print $.Template.BasePath "/backend/repository/repository-conf.yml") . | sha256sum }}
       labels:
-        app: repository
+{{ include "spaceone.labels" . | indent 8 }}
+        helm.stargate.spaceone.dev/service: repository
     spec:
       terminationGracePeriodSeconds: {{ .Values.gracePeriod }}
       containers:
