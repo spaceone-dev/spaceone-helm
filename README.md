@@ -16,7 +16,7 @@ Manage your infrastructure with SpaceONE. It doesn't matter what your infrastruc
 
 ### Commands
 
-> ⚠️  `inventory-scheduler` and `statistics-scheduler` doesn't work fine until you execute `initialize-spaceone` which is a Kubernetes `Job`. Please create the `Job` after reading the following commands.
+> ⚠️  `inventory-scheduler` and `statistics-scheduler` doesn't work fine until you execute `initialize-spaceone` which is a Kubernetes `Job`. Please create the `Job` after reading the following commands. Those pods like `inventory-scheduler` or `statistics-scheduler` has some labels like `helm.stargate.spaceone.dev/need_initialization!=true`
 
 You should input your aws credentials which have permissions for AWS Secret Mananger in `values.yaml`
 
@@ -24,6 +24,7 @@ You should input your aws credentials which have permissions for AWS Secret Mana
 $ helm repo add spaceone https://helm.stargate.spaceone.dev
 $ helm repo update
 $ helm install sp spaceone/spaceone -f values.yaml
+$ kubectl get pod -n sp -l "helm.stargate.spaceone.dev/need_initialization!=true"
 
 $ sudo kubefwd svc -n default # this command can be replaced with any codes to execute the same job.
 ```
