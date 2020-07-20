@@ -100,24 +100,33 @@ backend:
 
 frontend:
 #  domain: root # 안먹힘
-  replicas: 1
   enabled: true
+  replicas: 1
   imagePullPolicy: IfNotPresent
   console:
     enabled: true
     endpoint: console-client
-    image: spaceone/console
-  consoleApi:
-    endpoint: console-server
+    image: spaceone/console:latest
+    host: console
+
+  root:
     enabled: true
-    image: spaceone/console-api
+    endpoint: root
+    host: root
+
+  consoleApi:
+    enabled: true
+    endpoint: console-server
+
+    image: spaceone/console-api:latest
+
 
 supervisor:
   enabled: true
   imagePullPolicy: IfNotPresent
   supervisor:
     endpoint: supervisor
-    image: pyengine/supervisor
+    image: spaceone/supervisor:latest
     replicas: 1
     imagePullPolicy: IfNotPresent
     token: # yaml for TOKEN or TOKEN_INFO

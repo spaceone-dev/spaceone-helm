@@ -10,7 +10,10 @@ data:
     {
       "cors": [
         "chrome-extension://*",
-        "http://*"
+        "http://*",
+        "https://*",
+        "http://{{ .Values.frontend.console.host }}",
+        "https://{{ .Values.frontend.console.host }}"
       ],
       "endpoints": {
           "identity": {

@@ -9,7 +9,7 @@ data:
   production.json: |
     {
       "VUE_APP_API": {
-        "ENDPOINT": "http://console-server"
+        "ENDPOINT": "http://{{ .Values.frontend.consoleApi.endpoint }}"
       },
       "GTAG_ID": "DISABLED",
       "NO_SERVER_MODE": false

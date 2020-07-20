@@ -4,7 +4,7 @@ metadata:
   name: initialize-spaceone
   namespace: {{ .Release.Namespace }}
   labels:
-    helm.stargate.spaceone.dev/service: mongo
+    helm.stargate.spaceone.dev/service: initialize-spaceone
 {{ include "spaceone.labels" . | indent 4 }}
 spec:
   activeDeadlineSeconds: 300
@@ -12,7 +12,7 @@ spec:
     metadata:
       name: "{{ .Release.Name }}"
       labels:
-        helm.stargate.spaceone.dev/service: mongo
+        helm.stargate.spaceone.dev/service: initialize-spaceone
 {{ include "spaceone.labels" . | indent 8 }}
     spec:
       restartPolicy: OnFailure
@@ -25,7 +25,7 @@ spec:
           - mongo --host {{ .Values.mongo.host }}:{{ .Values.mongo.port }} --username {{ .Values.mongo.username }} --password {{ .Values.mongo.password }} < /root/scripts/init-db.js
         volumeMounts:
           - mountPath: /root/scripts/init-db.js
-            name: mongo-conf
+            name: initializer-conf
             subPath: init-db.js
 
       - name: initialize
@@ -35,8 +35,8 @@ spec:
           - /root/scripts/configmap/initialize.sh
         volumeMounts:
           - mountPath: /root/scripts/configmap
-            name: mongo-conf
+            name: initializer-conf
       volumes:
-        - name: mongo-conf
+        - name: initializer-conf
           configMap:
-            name: mongo-conf
+            name: initializer-conf

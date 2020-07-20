@@ -19,8 +19,9 @@ spec:
     helm.stargate.spaceone.dev/service: console-client
   sessionAffinity: None
   type: NodePort
-
+{{ end }}
 ---
+{{ if .Values.frontend.root.enabled }}
 # this service let you access to http://root by kubefwd
 apiVersion: v1
 kind: Service
