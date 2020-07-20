@@ -96,6 +96,8 @@ This will be appended soon.
 
 ## Release History
 
+- 0.1.3
+  - you can set frontend hosts and endpoints.
 - 0.1.0
   - Initial version.
 
