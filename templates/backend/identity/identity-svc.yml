@@ -1,22 +1,32 @@
-{{ if .Values.backend.enabled }}
-{{ if .Values.backend.services.identity.enabled }}
+{{- if .Values.backend.enabled }}
+  {{- if .Values.backend.services.identity.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
   annotations:
+  {{- range $key, $value := .Values.backend.services.identity.service.annotations }}
+    {{- if not (eq $key "nil") }}
+    {{ $key }}: {{ $value }}
+    {{- end }}
+  {{- end }}
   labels:
 {{ include "spaceone.labels" . | indent 4 }}
     helm.stargate.spaceone.dev/service: identity
   name: identity
   namespace: {{ .Release.Namespace }}
 spec:
+    {{- with .Values.backend.services.identity }}
   ports:
-    - nodePort: 30051
-      port: 50051
+    - port: 50051
       protocol: TCP
+      {{- if (eq .service.type "NodePort") or (eq .service.type "LoadBalancer") }}
+      nodePort: {{ .service.nodePort }}
+      {{- end}}
   selector:
     helm.stargate.spaceone.dev/service: identity
   sessionAffinity: None
-  type: NodePort
-{{ end }}
-{{ end }}
+  type: {{ .service.type }}
+    {{- end }}
+
+  {{- end }}
+{{- end }}

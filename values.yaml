@@ -44,12 +44,16 @@ backend:
       image: spaceone/config:latest
       endpoint: config:50051
 
-
     identity:
       enabled: true
       image: spaceone/identity:latest
       endpoint: identity:50051
-#      endpoint: 192.168.0.13:50053
+      service:
+        type: ClusterIP
+        annotations:
+          nil: nil
+        nodePort:
+
     inventory:
       enabled: true
       image: spaceone/inventory:latest
@@ -134,6 +138,8 @@ supervisor:
       config:
         host: "{{ .Values.consul.host }}"
       uri: debug/supervisor/TOKEN
+    plugin:
+      imageRepository: pyengine
   kubectlProxy:
     image: spaceone/kubectl-proxy
 
