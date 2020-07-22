@@ -1,5 +1,5 @@
-{{ if .Values.backend.enabled }}
-{{ if .Values.backend.services.identity.enabled }}
+{{- if .Values.backend.enabled }}
+  {{- if .Values.backend.services.identity.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -70,5 +70,5 @@ data:
         SecretConnector:
           endpoint:
             v1: grpc://{{ .Values.backend.services.secret.endpoint }}
-{{ end }}
-{{ end }}
+  {{- end }}
+{{- end }}
