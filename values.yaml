@@ -12,11 +12,17 @@ mongo:
   enabled: true
   initialize: true
   image: mongo
+  replicas: 1
   imagePullPolicy: IfNotPresent
   username: mongouser
   password: mongopassword
   host: mongo
   port: 27017
+  service:
+    type: ClusterIP
+    annotations:
+      nil: nil
+    nodePort:
 
 redis:
   enabled: true
@@ -24,12 +30,22 @@ redis:
   imagePullPolicy: IfNotPresent
   host: redis
   port: 6379
+  service:
+    type: ClusterIP
+    annotations:
+      nil: nil
+    nodePort:
 
 consul:
   enabled: true
   image: consul:1.7.3
   imagePullPolicy: IfNotPresent
   host: consul
+  service:
+    type: ClusterIP
+    annotations:
+      nil: nil
+    nodePort:
 
 backend:
   enabled: true
@@ -43,6 +59,11 @@ backend:
       enabled: true
       image: spaceone/config:latest
       endpoint: config:50051
+      service:
+        type: ClusterIP
+        annotations:
+          nil: nil
+        nodePort:
 
     identity:
       enabled: true
@@ -58,48 +79,92 @@ backend:
       enabled: true
       image: spaceone/inventory:latest
       endpoint: inventory:50051
+      service:
+        type: ClusterIP
+        annotations:
+          nil: nil
+        nodePort:
 
     inventoryWorker:
       enabled: true
       image: spaceone/inventory:latest
+      service:
+        type: ClusterIP
+        annotations:
+          nil: nil
+        nodePort:
 
     inventoryScheduler:
       enabled: true
       image: spaceone/inventory:latest
+      service:
+        type: ClusterIP
+        annotations:
+          nil: nil
+        nodePort:
 
     monitoring:
       enabled: true
       image: spaceone/monitoring:latest
       endpoint: monitoring:50051
+      service:
+        type: ClusterIP
+        annotations:
+          nil: nil
+        nodePort:
 
     plugin:
       enabled: true
       image: spaceone/plugin:latest
       endpoint: plugin:50051
+      service:
+        type: ClusterIP
+        annotations:
+          nil: nil
+        nodePort:
 
     repository:
       enabled: true
       image: spaceone/repository:latest
       endpoint: repository:50051
+      service:
+        type: ClusterIP
+        annotations:
+          nil: nil
+        nodePort:
 
     secret:
       enabled: true
       image: spaceone/secret:latest
       endpoint: secret:50051
+      service:
+        type: ClusterIP
+        annotations:
+          nil: nil
+        nodePort:
       awsSecretManagerConnector:
         awsAccessKeyId:
         awsSecretAccessKey:
         regionName: ap-northeast-2
 
-
     statistics:
       enabled: true
       image: spaceone/statistics:latest
       endpoint: statistics:50051
+      service:
+        type: ClusterIP
+        annotations:
+          nil: nil
+        nodePort:
 
     statisticsScheduler:
       enabled: true
       image: spaceone/statistics:latest
+      service:
+        type: ClusterIP
+        annotations:
+          nil: nil
+        nodePort:
 
 
 frontend:
@@ -112,17 +177,31 @@ frontend:
     endpoint: console-client
     image: spaceone/console:latest
     host: console
+    service:
+      type: ClusterIP
+      annotations:
+        nil: nil
+      nodePort:
 
   root:
     enabled: true
     endpoint: root
     host: root
+    service:
+      type: ClusterIP
+      annotations:
+        nil: nil
+      nodePort:
 
   consoleApi:
     enabled: true
     endpoint: console-server
-
     image: spaceone/console-api:latest
+    service:
+      type: ClusterIP
+      annotations:
+        nil: nil
+      nodePort:
 
 
 supervisor:
@@ -140,6 +219,11 @@ supervisor:
       uri: debug/supervisor/TOKEN
     plugin:
       imageRepository: pyengine
+    service:
+      type: ClusterIP
+      annotations:
+        nil: nil
+      nodePort:
   kubectlProxy:
     image: spaceone/kubectl-proxy
 
