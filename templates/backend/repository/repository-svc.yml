@@ -4,19 +4,28 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
+  {{- range $key, $value := .Values.backend.services.repository.service.annotations }}
+    {{- if not (eq $key "nil") }}
+    {{ $key }}: {{ $value }}
+    {{- end }}
+  {{- end }}
   labels:
 {{ include "spaceone.labels" . | indent 4 }}
     helm.stargate.spaceone.dev/service: repository
   name: repository
   namespace: {{ .Release.Namespace }}
 spec:
+    {{- with .Values.backend.services.repository }}
   ports:
-    - nodePort: 30053
-      port: 50051
+    - port: 50051
       protocol: TCP
+      {{- if (eq .service.type "NodePort") or (eq .service.type "LoadBalancer") }}
+      nodePort: {{ .service.nodePort }}
+      {{- end}}
   selector:
     helm.stargate.spaceone.dev/service: repository
   sessionAffinity: None
-  type: NodePort
+  type: {{ .service.type }}
+    {{- end }}
   {{- end }}
 {{- end }}

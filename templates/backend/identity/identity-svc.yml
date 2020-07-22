@@ -27,6 +27,5 @@ spec:
   sessionAffinity: None
   type: {{ .service.type }}
     {{- end }}
-
   {{- end }}
 {{- end }}

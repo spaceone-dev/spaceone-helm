@@ -8,7 +8,7 @@ metadata:
   name: mongo
   namespace: {{ .Release.Namespace }}
 spec:
-  replicas: {{ .Values.backend.replicas }}
+  replicas: {{ .Values.mongo.replicas }}
   revisionHistoryLimit: {{ .Values.backend.revisionHistoryLimit | int }}
   selector:
     matchLabels:
