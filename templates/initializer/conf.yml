@@ -247,7 +247,7 @@ data:
                 },
                 'template': {'options': {'schema': SCHEMA}},
                 "tags": {
-                    "icon": "https://assets-console-cloudone-stg.s3.ap-northeast-2.amazonaws.com/console-assets/icons/aws-ec2.svg",
+                    "icon": "https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/aws-ec2.svg",
                     "description": "AWS EC2 Compute collector",
                     "{{ .Values.supervisor.supervisor.plugin.imageRepository }}:plugin_name": "aws-ec2"
                     }
@@ -266,7 +266,7 @@ data:
                 },
                 'template': {'options': {'schema': SCHEMA}},
                 "tags": {
-                    "icon": "https://assets-console-cloudone-stg.s3.ap-northeast-2.amazonaws.com/console-assets/icons/aws-cloudservice.svg",
+                    "icon": "https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/aws-cloudservice.svg",
                     "description": "AWS Cloud Services collector",
                     "{{ .Values.supervisor.supervisor.plugin.imageRepository }}:plugin_name": "aws-cloud-services"
                     }
@@ -283,7 +283,7 @@ data:
                 },
                 'template': {'options': {'schema': SCHEMA}},
                 'tags' : {
-                    "icon": "https://assets-console-cloudone-stg.s3.ap-northeast-2.amazonaws.com/console-assets/icons/gcp-compute.svg",
+                    "icon": "https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/gcp-compute.svg",
                     "description": "Google Compute Engine collector",
                     "{{ .Values.supervisor.supervisor.plugin.imageRepository }}:plugin_name": "gcp-compute"
                     }
@@ -301,7 +301,7 @@ data:
                 'labels': ['Monitoring', 'AWS', 'CloudWatch'],
                 'tags': {
                     'description': 'AWS CloudWatch Monitoring Plugin',
-                    'icon': 'https://assets-console-cloudone-stg.s3.ap-northeast-2.amazonaws.com/console-assets/icons/aws-cloudwatch.svg',
+                    'icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/aws-cloudwatch.svg',
                     '{{ .Values.supervisor.supervisor.plugin.imageRepository }}:plugin_name': 'aws-cloud-watch'
                 }
             },
@@ -317,7 +317,7 @@ data:
                 },
                 'labels': ['Monitoring', 'AWS', 'Personal_Health_Dashboard'],
                 "tags": {
-                    "icon": "https://assets-console-cloudone-stg.s3.ap-northeast-2.amazonaws.com/console-assets/icons/aws-phd.svg",
+                    "icon": "https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/aws-phd.svg",
                     "description": "AWS Personal Health Monitoring Plugin",
                     "{{ .Values.supervisor.supervisor.plugin.imageRepository }}:plugin_name": "aws-health"
                     }
@@ -334,7 +334,7 @@ data:
                 },
                 'labels': ['Monitoring', 'AWS', 'CloudTrail'],
                 "tags": {
-                    "icon": "https://assets-console-cloudone-stg.s3.ap-northeast-2.amazonaws.com/console-assets/icons/aws-cloudtrail.svg",
+                    "icon": "https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/aws-cloudtrail.svg",
                     "description": "AWS CloudTrail Monitoring Plugin",
                     "{{ .Values.supervisor.supervisor.plugin.imageRepository }}:plugin_name": "aws-cloud-trail"
                     }
@@ -351,7 +351,7 @@ data:
                 },
                 'image':'{{ .Values.supervisor.supervisor.plugin.imageRepository }}/googleoauth2',
                 'tags' : {
-                    "icon": "https://assets-console-cloudone-stg.s3.ap-northeast-2.amazonaws.com/console-assets/icons/google-icon.svg",
+                    "icon": "https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/google-icon.svg",
                     "description": "Google OAuth2 Authentication",
                     "{{ .Values.supervisor.supervisor.plugin.imageRepository }}:plugin_name": "google-oauth2"
                     }
