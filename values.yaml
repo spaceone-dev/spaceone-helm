@@ -22,7 +22,6 @@ mongo:
     type: ClusterIP
     annotations:
       nil: nil
-    
 
 redis:
   enabled: true

@@ -99,7 +99,9 @@ This will be appended soon.
 
 - 0.1.3
   - you can set frontend hosts and endpoints.
-  - serve only the marketplace repository temporarily.
+  - serve local repository.
+  - helm refactoring - applied unified indents
+  - service annotations and types are available - ClusterIP, NodePort and LoadBalancer.
 - 0.1.0
   - Initial version.
 
