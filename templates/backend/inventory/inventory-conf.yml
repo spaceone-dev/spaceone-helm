@@ -1,5 +1,5 @@
-{{ if .Values.backend.enabled }}
-{{ if .Values.backend.services.inventory.enabled }}
+{{- if .Values.backend.enabled }}
+  {{- if .Values.backend.services.inventory.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -71,5 +71,5 @@ data:
 {{ tpl (toYaml .Values.supervisor.supervisor.token) . | indent 8 }}
 
       collect_queue: collector_q
-{{ end }}
-{{ end }}
+  {{- end }}
+{{- end }}
