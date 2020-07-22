@@ -22,7 +22,7 @@ mongo:
     type: ClusterIP
     annotations:
       nil: nil
-    nodePort:
+    
 
 redis:
   enabled: true
@@ -34,7 +34,7 @@ redis:
     type: ClusterIP
     annotations:
       nil: nil
-    nodePort:
+    
 
 consul:
   enabled: true
@@ -45,7 +45,7 @@ consul:
     type: ClusterIP
     annotations:
       nil: nil
-    nodePort:
+    
 
 backend:
   enabled: true
@@ -63,7 +63,6 @@ backend:
         type: ClusterIP
         annotations:
           nil: nil
-        nodePort:
 
     identity:
       enabled: true
@@ -73,7 +72,6 @@ backend:
         type: ClusterIP
         annotations:
           nil: nil
-        nodePort:
 
     inventory:
       enabled: true
@@ -83,7 +81,6 @@ backend:
         type: ClusterIP
         annotations:
           nil: nil
-        nodePort:
 
     inventoryWorker:
       enabled: true
@@ -92,7 +89,6 @@ backend:
         type: ClusterIP
         annotations:
           nil: nil
-        nodePort:
 
     inventoryScheduler:
       enabled: true
@@ -101,7 +97,6 @@ backend:
         type: ClusterIP
         annotations:
           nil: nil
-        nodePort:
 
     monitoring:
       enabled: true
@@ -111,7 +106,6 @@ backend:
         type: ClusterIP
         annotations:
           nil: nil
-        nodePort:
 
     plugin:
       enabled: true
@@ -121,7 +115,6 @@ backend:
         type: ClusterIP
         annotations:
           nil: nil
-        nodePort:
 
     repository:
       enabled: true
@@ -131,7 +124,6 @@ backend:
         type: ClusterIP
         annotations:
           nil: nil
-        nodePort:
 
     secret:
       enabled: true
@@ -141,7 +133,7 @@ backend:
         type: ClusterIP
         annotations:
           nil: nil
-        nodePort:
+
       awsSecretManagerConnector:
         awsAccessKeyId:
         awsSecretAccessKey:
@@ -155,7 +147,6 @@ backend:
         type: ClusterIP
         annotations:
           nil: nil
-        nodePort:
 
     statisticsScheduler:
       enabled: true
@@ -164,7 +155,6 @@ backend:
         type: ClusterIP
         annotations:
           nil: nil
-        nodePort:
 
 
 frontend:
@@ -178,30 +168,28 @@ frontend:
     image: spaceone/console:latest
     host: console
     service:
-      type: ClusterIP
+      type: NodePort
       annotations:
         nil: nil
-      nodePort:
 
+  # this service let you access to console through http://root by kubefwd
   root:
     enabled: true
     endpoint: root
     host: root
     service:
-      type: ClusterIP
+      type: NodePort
       annotations:
         nil: nil
-      nodePort:
 
   consoleApi:
     enabled: true
-    endpoint: console-server
+    endpoint: console-api
     image: spaceone/console-api:latest
     service:
       type: ClusterIP
       annotations:
         nil: nil
-      nodePort:
 
 
 supervisor:
@@ -223,7 +211,7 @@ supervisor:
       type: ClusterIP
       annotations:
         nil: nil
-      nodePort:
+      
   kubectlProxy:
     image: spaceone/kubectl-proxy
 

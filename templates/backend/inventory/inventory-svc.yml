@@ -4,11 +4,11 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-  {{- range $key, $value := .Values.backend.services.inventory.service.annotations }}
-    {{- if not (eq $key "nil") }}
+    {{- range $key, $value := .Values.backend.services.inventory.service.annotations }}
+      {{- if not (eq $key "nil") }}
     {{ $key }}: {{ $value }}
+      {{- end }}
     {{- end }}
-  {{- end }}
   labels:
 {{ include "spaceone.labels" . | indent 4 }}
     helm.stargate.spaceone.dev/service: inventory
@@ -19,7 +19,7 @@ spec:
   ports:
     - port: 50051
       protocol: TCP
-      {{- if (eq .service.type "NodePort") or (eq .service.type "LoadBalancer") }}
+      {{- if ((eq .service.type "NodePort") or (eq .service.type "LoadBalancer")) and eq .service.nodePort }}
       nodePort: {{ .service.nodePort }}
       {{- end}}
   selector:

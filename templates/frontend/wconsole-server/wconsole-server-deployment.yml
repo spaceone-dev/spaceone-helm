@@ -3,24 +3,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: console-server
+  name: console-api
   namespace: {{ .Release.Namespace }}
   labels:
 {{ include "spaceone.labels" . | indent 4 }}
-    helm.stargate.spaceone.dev/service: console-server
+    helm.stargate.spaceone.dev/service: console-api
 spec:
   replicas: {{ .Values.frontend.replicas }}
   revisionHistoryLimit: 3
   selector:
     matchLabels:
-      helm.stargate.spaceone.dev/service: console-server
+      helm.stargate.spaceone.dev/service: console-api
   template:
     metadata:
       annotations:
         spaceone.auto-deploy-flag: {{ include (print $.Template.BasePath "/frontend/wconsole-server/wconsole-server-nginx-conf.yml") . | sha256sum }}
       labels:
 {{ include "spaceone.labels" . | indent 8 }}
-        helm.stargate.spaceone.dev/service: console-server
+        helm.stargate.spaceone.dev/service: console-api
     spec:
       terminationGracePeriodSeconds: {{ .Values.gracePeriod }}
       containers:

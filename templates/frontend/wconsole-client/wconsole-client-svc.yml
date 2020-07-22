@@ -1,46 +1,64 @@
-{{ if .Values.frontend.enabled }}
-{{ if .Values.frontend.console.enabled }}
+{{- if .Values.frontend.enabled }}
+  {{- if .Values.frontend.console.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
   annotations:
+    {{- range $key, $value := .Values.frontend.console.service.annotations }}
+      {{- if not (eq $key "nil") }}
+    {{ $key }}: {{ $value }}
+      {{- end }}
+    {{- end }}
   labels:
 {{ include "spaceone.labels" . | indent 4 }}
-    helm.stargate.spaceone.dev/service: console-client
-  name: console-client
+    helm.stargate.spaceone.dev/service: console
+  name: console
   namespace: {{ .Release.Namespace }}
 spec:
+    {{- with .Values.frontend.console }}
   ports:
     - port: 80
       protocol: TCP
       targetPort: 80
-      nodePort: 32374
+      {{- if ((eq .service.type "NodePort") or (eq .service.type "LoadBalancer")) and eq .service.nodePort }}
+      nodePort: {{ .service.nodePort }}
+      {{- end}}
   selector:
-    helm.stargate.spaceone.dev/service: console-client
+    helm.stargate.spaceone.dev/service: console
   sessionAffinity: None
-  type: NodePort
-{{ end }}
+  type: {{ .service.type }}
+    {{- end }}
+  {{- end }}
 ---
-{{ if .Values.frontend.root.enabled }}
-# this service let you access to http://root by kubefwd
+  {{- if .Values.frontend.root.enabled }}
+# this service let you access to console through http://root by kubefwd
 apiVersion: v1
 kind: Service
 metadata:
   annotations:
+    {{- range $key, $value := .Values.frontend.root.service.annotations }}
+      {{- if not (eq $key "nil") }}
+    {{ $key }}: {{ $value }}
+      {{- end }}
+    {{- end }}
   labels:
 {{ include "spaceone.labels" . | indent 4 }}
-    helm.stargate.spaceone.dev/service: console-client
+    helm.stargate.spaceone.dev/service: console
   name: root
   namespace: {{ .Release.Namespace }}
 spec:
+    {{- with .Values.frontend.root }}
   ports:
     - port: 80
       protocol: TCP
       targetPort: 80
-      nodePort: 31761
+      {{- if ((eq .service.type "NodePort") or (eq .service.type "LoadBalancer")) and eq .service.nodePort }}
+      nodePort: {{ .service.nodePort }}
+      {{- end}}
   selector:
-    helm.stargate.spaceone.dev/service: console-client
+    helm.stargate.spaceone.dev/service: console
   sessionAffinity: None
-  type: NodePort
-{{ end }}
-{{ end }}
+  type: {{ .service.type }}
+    {{- end }}
+  {{- end }}
+{{- end }}
