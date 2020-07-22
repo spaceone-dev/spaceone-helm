@@ -9,7 +9,7 @@ kubectl get pod -n {{ .Release.Namespace }} -l "helm.stargate.spaceone.dev/need_
 2. Copy and paste the following commands to your terminal.
 
 cat << EOF | kubectl apply -f -
-$(kubectl get cm -n {{ .Release.Namespace }} initialize-spaceone -o 'go-template={{ `{{index .data "initialize-spaceone.yml"}}` }}')
+$(kubectl get cm -n {{ .Release.Namespace }} initializer-conf -o 'go-template={{ `{{index .data "initialize-spaceone.yml"}}` }}')
 EOF
 
 3. Check out if the job has been completed successfully.

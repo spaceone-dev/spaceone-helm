@@ -12,7 +12,8 @@ Manage your infrastructure with SpaceONE. It doesn't matter what your infrastruc
 
 * `kubefwd` or any environments provided `port-forward`
 * a `Kubernetes` Cluster.(minikube, EKS, ...)
-* Configurations for AWS Credentials in `values.yaml`-`backend.services.secret.awsSecretManagerConnector`
+* Some configurations in `values.yaml`
+  * AWS Credentials for AWS SecretManager in `backend.services.secret.awsSecretManagerConnector`
 
 ### Commands
 
@@ -98,6 +99,7 @@ This will be appended soon.
 
 - 0.1.3
   - you can set frontend hosts and endpoints.
+  - serve only the marketplace repository temporarily.
 - 0.1.0
   - Initial version.
 

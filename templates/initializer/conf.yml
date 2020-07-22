@@ -239,7 +239,7 @@ data:
         'aws-ec2': {
                 'name':'aws-ec2',
                 'service_type':'inventory.collector',
-                'image':'spaceone/aws-ec2',
+                'image':'{{ .Values.supervisor.supervisor.plugin.imageRepository }}/aws-ec2',
                 'labels': ['Server'],
                 'provider': 'aws',
                 'capability': {
@@ -249,14 +249,14 @@ data:
                 "tags": {
                     "icon": "https://assets-console-cloudone-stg.s3.ap-northeast-2.amazonaws.com/console-assets/icons/aws-ec2.svg",
                     "description": "AWS EC2 Compute collector",
-                    "spaceone:plugin_name": "aws-ec2"
+                    "{{ .Values.supervisor.supervisor.plugin.imageRepository }}:plugin_name": "aws-ec2"
                     }
             },
 
         'aws-cloud-services': {
                 'name':'aws-cloud-services',
                 'service_type':'inventory.collector',
-                'image':'spaceone/aws-cloud-services',
+                'image':'{{ .Values.supervisor.supervisor.plugin.imageRepository }}/aws-cloud-services',
                 'labels': ['DynamoDB', 'S3', 'ElastiCache', 'AutoScaling Group', 'DirectConnector', 'RDS', 'DocumentDB',
                            'EKS', 'Redshift', 'EFS', 'ECS', 'Workspace', 'API Gateway', 'Route53',
                            'SQS', 'ECR', 'CloudTrail', 'SNS', 'SecretManager', 'AmazonAthena' 'KMS', 'Kinesis'],
@@ -268,14 +268,14 @@ data:
                 "tags": {
                     "icon": "https://assets-console-cloudone-stg.s3.ap-northeast-2.amazonaws.com/console-assets/icons/aws-cloudservice.svg",
                     "description": "AWS Cloud Services collector",
-                    "spaceone:plugin_name": "aws-cloud-services"
+                    "{{ .Values.supervisor.supervisor.plugin.imageRepository }}:plugin_name": "aws-cloud-services"
                     }
             },
 
         'gcp-compute': {
                 'name': 'gcp-compute',
                 'service_type':'inventory.collector',
-                'image':'spaceone/gcp-compute',
+                'image':'{{ .Values.supervisor.supervisor.plugin.imageRepository }}/gcp-compute',
                 'labels': ['Server'],
                 'provider': 'google_cloud',
                 'capability': {
@@ -285,12 +285,12 @@ data:
                 'tags' : {
                     "icon": "https://assets-console-cloudone-stg.s3.ap-northeast-2.amazonaws.com/console-assets/icons/gcp-compute.svg",
                     "description": "Google Compute Engine collector",
-                    "spaceone:plugin_name": "gcp-compute"
+                    "{{ .Values.supervisor.supervisor.plugin.imageRepository }}:plugin_name": "gcp-compute"
                     }
             },
         'cloud-watch': {
                 'name': 'aws-cloud-watch',
-                'image': 'spaceone/aws-cloudwatch',
+                'image': '{{ .Values.supervisor.supervisor.plugin.imageRepository }}/aws-cloudwatch',
                 'service_type': 'monitoring.DataSource',
                 'provider': 'aws',
                 'capability': {
@@ -302,12 +302,12 @@ data:
                 'tags': {
                     'description': 'AWS CloudWatch Monitoring Plugin',
                     'icon': 'https://assets-console-cloudone-stg.s3.ap-northeast-2.amazonaws.com/console-assets/icons/aws-cloudwatch.svg',
-                    'spaceone:plugin_name': 'aws-cloud-watch'
+                    '{{ .Values.supervisor.supervisor.plugin.imageRepository }}:plugin_name': 'aws-cloud-watch'
                 }
             },
         'aws-health': {
                 'name':'aws-health',
-                'image':'spaceone/aws-health',
+                'image':'{{ .Values.supervisor.supervisor.plugin.imageRepository }}/aws-health',
                 'service_type':'monitoring.DataSource',
                 'provider': 'aws',
                 'capability': {
@@ -319,13 +319,13 @@ data:
                 "tags": {
                     "icon": "https://assets-console-cloudone-stg.s3.ap-northeast-2.amazonaws.com/console-assets/icons/aws-phd.svg",
                     "description": "AWS Personal Health Monitoring Plugin",
-                    "spaceone:plugin_name": "aws-health"
+                    "{{ .Values.supervisor.supervisor.plugin.imageRepository }}:plugin_name": "aws-health"
                     }
             },
         'aws-cloud-trail': {
                 'name':'aws-cloud-trail',
                 'service_type':'monitoring.DataSource',
-                'image':'spaceone/aws-cloudtrail',
+                'image':'{{ .Values.supervisor.supervisor.plugin.imageRepository }}/aws-cloudtrail',
                 'provider': 'aws',
                 'capability': {
                     'use_resource_secret': True,
@@ -336,7 +336,7 @@ data:
                 "tags": {
                     "icon": "https://assets-console-cloudone-stg.s3.ap-northeast-2.amazonaws.com/console-assets/icons/aws-cloudtrail.svg",
                     "description": "AWS CloudTrail Monitoring Plugin",
-                    "spaceone:plugin_name": "aws-cloud-trail"
+                    "{{ .Values.supervisor.supervisor.plugin.imageRepository }}:plugin_name": "aws-cloud-trail"
                     }
             },
         'google-oauth2': {
@@ -349,11 +349,11 @@ data:
                         {"key": "client_id", "name":"Oauth Client ID", "type":"string", "is_required":True, "example":"OAuth 2.0 Client ID"}
                       ],
                 },
-                'image':'spaceone/googleoauth2',
+                'image':'{{ .Values.supervisor.supervisor.plugin.imageRepository }}/googleoauth2',
                 'tags' : {
                     "icon": "https://assets-console-cloudone-stg.s3.ap-northeast-2.amazonaws.com/console-assets/icons/google-icon.svg",
                     "description": "Google OAuth2 Authentication",
-                    "spaceone:plugin_name": "google-oauth2"
+                    "{{ .Values.supervisor.supervisor.plugin.imageRepository }}:plugin_name": "google-oauth2"
                     }
         }
     }
@@ -672,3 +672,5 @@ data:
         ...
     if __name__ == "__main__":
       unittest.main(testRunner=RichTestRunner)
+  initialize-spaceone.yml: |
+{{ tpl (.Files.Get "files/initialize-spaceone.yml") . | indent 4 }}
