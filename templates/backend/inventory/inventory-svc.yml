@@ -19,7 +19,7 @@ spec:
   ports:
     - port: 50051
       protocol: TCP
-      {{- if ((eq .service.type "NodePort") or (eq .service.type "LoadBalancer")) and eq .service.nodePort }}
+      {{- if and (or (eq .service.type "NodePort") (eq .service.type "LoadBalancer")) .service.nodePort }}
       nodePort: {{ .service.nodePort }}
       {{- end}}
   selector:

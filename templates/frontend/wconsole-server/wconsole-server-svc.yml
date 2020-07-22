@@ -20,7 +20,7 @@ spec:
     - port: 80
       protocol: TCP
       targetPort: 80
-      {{- if ((eq .service.type "NodePort") or (eq .service.type "LoadBalancer")) and .service.nodePort }}
+      {{- if and (or (eq .service.type "NodePort") (eq .service.type "LoadBalancer")) .service.nodePort }}
       nodePort: {{ .service.nodePort }}
       {{- end}}
   selector:

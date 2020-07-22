@@ -186,7 +186,7 @@ frontend:
     endpoint: console-api
     image: spaceone/console-api:latest
     service:
-      type: ClusterIP
+      type: NodePort
       annotations:
         nil: nil
 
