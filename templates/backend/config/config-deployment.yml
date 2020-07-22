@@ -1,5 +1,5 @@
-{{ if .Values.backend.enabled }}
-{{ if .Values.backend.services.config.enabled }}
+{{- if .Values.backend.enabled }}
+  {{- if .Values.backend.services.config.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -68,5 +68,5 @@ spec:
             name: config-conf
         - name: log-volume
           emptyDir: {}
-{{ end }}
-{{ end }}
+  {{- end }}
+{{- end }}

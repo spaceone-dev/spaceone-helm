@@ -1,5 +1,5 @@
-{{ if .Values.backend.enabled }}
-{{ if .Values.backend.services.config.enabled }}
+{{- if .Values.backend.enabled }}
+  {{- if .Values.backend.services.config.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -21,5 +21,5 @@ data:
         - backend: spaceone.core.handler.authorization_handler.AuthorizationGRPCHandler
           uri: grpc://{{ .Values.backend.services.identity.endpoint }}/v1/Authorization/verify
 
-{{ end }}
-{{ end }}
+  {{- end }}
+{{- end }}

@@ -1,5 +1,5 @@
-{{ if .Values.backend.enabled }}
-{{ if .Values.backend.services.config.enabled }}
+{{- if .Values.backend.enabled }}
+  {{- if .Values.backend.services.config.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -19,5 +19,5 @@ spec:
     helm.stargate.spaceone.dev/service: config
   sessionAffinity: None
   type: NodePort
-{{ end }}
-{{ end }}
+{{- end }}
+{{- end }}
