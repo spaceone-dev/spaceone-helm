@@ -15,7 +15,7 @@ metadata:
   name: console
   namespace: {{ .Release.Namespace }}
 spec:
-    {{- range $key, $value := .Values.frontend.console.extraSpec }}
+    {{- range $key, $value := .Values.frontend.console.service.extraSpec }}
       {{- if not (eq $key "nil") }}
   {{ $key }}: {{ $value }}
       {{- end }}
@@ -52,7 +52,7 @@ metadata:
   name: root
   namespace: {{ .Release.Namespace }}
 spec:
-    {{- range $key, $value := .Values.frontend.root.extraSpec }}
+    {{- range $key, $value := .Values.frontend.root.service.extraSpec }}
       {{- if not (eq $key "nil") }}
   {{ $key }}: {{ $value }}
       {{- end }}

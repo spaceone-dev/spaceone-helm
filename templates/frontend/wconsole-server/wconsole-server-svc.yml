@@ -15,7 +15,7 @@ metadata:
   name: console-api
   namespace: {{ .Release.Namespace }}
 spec:
-    {{- range $key, $value := .Values.frontend.consoleApi.extraSpec }}
+    {{- range $key, $value := .Values.frontend.consoleApi.service.extraSpec }}
       {{- if not (eq $key "nil") }}
   {{ $key }}: {{ $value }}
       {{- end }}

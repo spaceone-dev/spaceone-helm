@@ -17,7 +17,7 @@ spec:
   template:
     metadata:
       annotations:
-        spaceone.auto-deploy-flag: {{ include (print $.Template.BasePath "/frontend/wconsole-server/wconsole-server-nginx-conf.yml") . | sha256sum }}
+        spaceone.auto-deploy-flag: {{ include (print $.Template.BasePath "/frontend/wconsole-server/wconsole-server-conf.yml") . | sha256sum }}
       labels:
 {{ include "spaceone.labels" . | indent 8 }}
         helm.stargate.spaceone.dev/service: console-api
