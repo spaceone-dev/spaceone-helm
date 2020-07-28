@@ -6,7 +6,7 @@ metadata:
   annotations:
     {{- range $key, $value := .Values.frontend.console.service.annotations }}
       {{- if not (eq $key "nil") }}
-    {{ $key }}: {{ $value }}
+    {{ $key }}: {{ $value | quote }}
       {{- end }}
     {{- end }}
   labels:
@@ -43,7 +43,7 @@ metadata:
   annotations:
     {{- range $key, $value := .Values.frontend.root.service.annotations }}
       {{- if not (eq $key "nil") }}
-    {{ $key }}: {{ $value }}
+    {{ $key }}: {{ $value | quote }}
       {{- end }}
     {{- end }}
   labels:
