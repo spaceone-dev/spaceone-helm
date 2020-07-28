@@ -161,14 +161,17 @@ frontend:
   enabled: true
   replicas: 1
   imagePullPolicy: IfNotPresent
+
   console:
     enabled: true
     endpoint: console-client
     image: spaceone/console:latest
     host: console
     service:
-      type: NodePort
+      type: ClusterIP
       annotations:
+        nil: nil
+      extraSpec:
         nil: nil
 
   # this service let you access to console through http://root by kubefwd
@@ -177,8 +180,10 @@ frontend:
     endpoint: root
     host: root
     service:
-      type: NodePort
+      type: ClusterIP
       annotations:
+        nil: nil
+      extraSpec:
         nil: nil
 
   consoleApi:
@@ -188,6 +193,8 @@ frontend:
     service:
       type: NodePort
       annotations:
+        nil: nil
+      extraSpec:
         nil: nil
 
 

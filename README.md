@@ -36,7 +36,7 @@ helm get notes sp
 # OR replace sp with your release name.
 ```
 
-You can see the console page via http://console-client
+You can see the console page via http://root
 
 ## Usage examples
 
@@ -97,6 +97,10 @@ This will be appended soon.
 
 ## Release History
 
+- 0.1.4
+  - support extraSpec to `Service` (e.g. .spec.loadBalancerSourceRanges)
+    - only available in `Frontend`
+  
 - 0.1.3
   - you can set frontend hosts and endpoints.
   - serve local repository.
