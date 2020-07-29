@@ -17,7 +17,7 @@ spec:
   template:
     metadata:
       annotations:
-        spaceone.auto-deploy-flag: {{ include (print $.Template.BasePath "/frontend/wconsole-server/wconsole-server-conf.yml") . | sha256sum }}
+        spaceone.auto-deploy-flag: {{ include (print $.Template.BasePath "/frontend/console-api/console-api-conf.yml") . | sha256sum }}
       labels:
 {{ include "spaceone.labels" . | indent 8 }}
         helm.stargate.spaceone.dev/service: console-api
@@ -30,36 +30,36 @@ spec:
           ports:
             - containerPort: 80
           volumeMounts:
-            - name: nginx-wconsole-server
+            - name: nginx-console-api
               mountPath: /etc/nginx/conf.d
               readOnly: yes
             - name: log-volume
               mountPath: /logs
-            - name: nginx-wconsole-server-nginx
+            - name: nginx-console-api-nginx
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
-        - name: wconsole-server
+        - name: console-api
           image: {{ .Values.frontend.consoleApi.image }}
           imagePullPolicy: {{ .Values.frontend.imagePullPolicy }}
           ports:
             - containerPort: 3000
           volumeMounts:
-            - name: wconsole-server-conf
+            - name: console-api-conf
               mountPath: /opt/spaceone/wconsole-server/config/production.json
               subPath: production.json
               readOnly: yes
             - name: log-volume
               mountPath: /logs
       volumes:
-        - name: wconsole-server-conf
+        - name: console-api-conf
           configMap:
-            name: wconsole-server-conf
-        - name: nginx-wconsole-server
+            name: console-api-conf
+        - name: nginx-console-api
           configMap:
-            name: nginx-wconsole-server
-        - name: nginx-wconsole-server-nginx
+            name: nginx-console-api
+        - name: nginx-console-api-nginx
           configMap:
-            name: nginx-wconsole-server-nginx
+            name: nginx-console-api-nginx
         - name: log-volume
           emptyDir: {}
 {{ end }}

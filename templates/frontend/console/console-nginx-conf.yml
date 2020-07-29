@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: wconsole-client-nginx
+  name: console-nginx
   namespace: {{ .Release.Namespace }}
 data:
   wconsole-client.conf: |
@@ -14,7 +14,7 @@ data:
         root /var/www/;
         index index.html;
 
-        access_log /logs/wconsole-client-access.log;
+        access_log /logs/console-access.log;
         error_log  /logs/wconsole-client-error.log;
 
         location / {

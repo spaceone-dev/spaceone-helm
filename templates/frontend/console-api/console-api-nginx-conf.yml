@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: nginx-wconsole-server-nginx
+  name: nginx-console-api-nginx
   namespace: {{ .Release.Namespace }}
 data:
   nginx.conf: |

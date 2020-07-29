@@ -17,14 +17,14 @@ spec:
   template:
     metadata:
       annotations:
-        spaceone.auto-deploy-flag: {{ include (print $.Template.BasePath "/frontend/wconsole-client/wconsole-client-spa-conf.yml") . | sha256sum }}
+        spaceone.auto-deploy-flag: {{ include (print $.Template.BasePath "/frontend/console/console-spa-conf.yml") . | sha256sum }}
       labels:
 {{ include "spaceone.labels" . | indent 8 }}
         helm.stargate.spaceone.dev/service: console
     spec:
       terminationGracePeriodSeconds: {{ .Values.gracePeriod }}
       containers:
-        - name: wconsole-client
+        - name: console
           image: {{ .Values.frontend.console.image }}
           imagePullPolicy: {{ .Values.frontend.imagePullPolicy }}
           env:
@@ -33,23 +33,23 @@ spec:
           ports:
             - containerPort: 80
           volumeMounts:
-            - name: wconsole-client-nginx
+            - name: console-nginx
               mountPath: /etc/nginx/conf.d/wconsole-client.conf
               subPath: wconsole-client.conf
               readOnly: true
             - name: log-volume
               mountPath: /logs
-            - name: wconsole-client-spa-conf
+            - name: console-spa-conf
               mountPath: /var/www/config/production.json
               subPath: production.json
       volumes:
-        - name: wconsole-client-nginx
+        - name: console-nginx
           configMap:
-            name: wconsole-client-nginx
+            name: console-nginx
         - name: log-volume
           emptyDir: {}
-        - name: wconsole-client-spa-conf
+        - name: console-spa-conf
           configMap:
-            name: wconsole-client-spa-conf
+            name: console-spa-conf
 {{ end }}
 {{ end }}

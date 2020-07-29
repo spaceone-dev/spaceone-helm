@@ -164,7 +164,6 @@ frontend:
 
   console:
     enabled: true
-    endpoint: console-client
     image: spaceone/console:latest
     host: console
     service:
@@ -177,7 +176,6 @@ frontend:
   # this service let you access to console through http://root by kubefwd
   root:
     enabled: true
-    endpoint: root
     host: root
     service:
       type: ClusterIP
