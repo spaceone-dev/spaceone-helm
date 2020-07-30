@@ -172,6 +172,9 @@ frontend:
         nil: nil
       extraSpec:
         nil: nil
+    domainName:
+      ref: config # hostname
+      name: root # megazone
 
   # this service let you access to console through http://root by kubefwd
   root:
