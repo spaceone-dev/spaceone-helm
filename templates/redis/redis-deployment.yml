@@ -1,4 +1,4 @@
-{{ if .Values.redis.enabled }}
+{{- if .Values.redis.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -25,32 +25,4 @@ spec:
         imagePullPolicy: {{ .Values.mongo.imagePullPolicy }}
         ports:
         - containerPort: {{ .Values.redis.port }}
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: redis-conf
-  namespace: {{ .Release.Namespace }}
-data:
-  redis.conf: |
-
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: redis
-  namespace: {{ .Release.Namespace }}
-  labels:
-{{ include "spaceone.labels" . | indent 4 }}
-    helm.stargate.spaceone.dev/service: redis
-spec:
-  type: NodePort
-  ports:
-  - port: {{ .Values.redis.port }}
-    targetPort: {{ .Values.redis.port }}
-    nodePort: 31357
-    protocol: TCP
-  selector:
-    helm.stargate.spaceone.dev/service: redis
-{{ end }}
+{{- end }}

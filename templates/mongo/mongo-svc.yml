@@ -9,8 +9,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   ports:
-    - port: {{ .Values.mongo.port }}
-      protocol: TCP
+{{ toYaml .Values.mongo.service.ports | indent 4 }}
   selector:
     helm.stargate.spaceone.dev/service: mongo
   sessionAffinity: None
