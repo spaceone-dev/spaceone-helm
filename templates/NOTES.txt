@@ -1,19 +1,15 @@
 Thank you for installing SpaceONE Helm Chart.
 
-# How to initialize SpaceONE
+# Customize your SpaceONE with values.yaml file
+Warn: Our initializing job might manipulate your mongo.
 
-1. Wait for microservices to get ready. (except for the microservices which need initialization)
-
-kubectl get pod -n {{ .Release.Namespace }} -l "helm.stargate.spaceone.dev/need_initialization!=true"
-
-2. Copy and paste the following commands to your terminal.
+# How to execute initializing job manually.
+SpaceONE Chart execute initializing job automatically right after you installed it.
+But you can also execute the initializing job manually by the following command.
 
 cat << EOF | kubectl apply -f -
 $(kubectl get cm -n {{ .Release.Namespace }} initializer-conf -o 'go-template={{ `{{index .data "initialize-spaceone.yml"}}` }}')
 EOF
 
-3. Check out if the job has been completed successfully.
-
-kubectl get job -n {{ .Release.Namespace }} initialize-spaceone
-
-4. Access to the k8s service named root.
+# Access to console service.
+You can see the web console page through {{ .Release.Namespace }}:service/console

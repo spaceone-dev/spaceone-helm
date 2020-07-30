@@ -28,11 +28,16 @@ spec:
       targetPort: 80
       {{- if and (or (eq .service.type "NodePort") (eq .service.type "LoadBalancer")) .service.nodePort }}
       nodePort: {{ .service.nodePort }}
+      {{- else if eq .service.type "ClusterIP" }}
+      nodePort: null
       {{- end}}
     - name: https
       port: 443
       protocol: TCP
       targetPort: 80
+      {{- if eq .service.type "ClusterIP" }}
+      nodePort: null
+      {{- end}}
   selector:
     helm.stargate.spaceone.dev/service: console-api
   sessionAffinity: None

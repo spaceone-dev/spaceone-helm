@@ -190,7 +190,7 @@ frontend:
     protocol: http # https
     image: spaceone/console-api:latest
     service:
-      type: NodePort
+      type: ClusterIP
       annotations:
         nil: nil
       extraSpec:
@@ -201,7 +201,6 @@ supervisor:
   enabled: true
   imagePullPolicy: IfNotPresent
   supervisor:
-    endpoint: supervisor
     image: spaceone/supervisor:latest
     replicas: 1
     imagePullPolicy: IfNotPresent

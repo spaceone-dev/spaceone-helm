@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: initialize-spaceone
+  name: initialize-spaceone-{{ randAlphaNum 5 | lower }}
   namespace: {{ .Release.Namespace }}
   labels:
     helm.stargate.spaceone.dev/service: initialize-spaceone
@@ -16,8 +16,56 @@ spec:
 {{ include "spaceone.labels" . | indent 8 }}
     spec:
       restartPolicy: OnFailure
+      initContainers:
+        - name: job-0-msa-health-check
+          image: umi0410/grpcurl
+          imagePullPolicy: Always
+          # runs for 15 seconds; echoes job name and timestamp
+          command:
+            - sh
+            - -c
+            - >
+              while true;
+              do
+
+                echo GRPC HealthCheck for microservices
+
+                ! grpcurl -plaintext {{ .Values.backend.services.config.endpoint }} spaceone.api.core.v1.ServerInfo/get_version;
+                config=$?;
+
+                ! grpcurl -plaintext {{ .Values.backend.services.identity.endpoint }} spaceone.api.core.v1.ServerInfo/get_version;
+                identity=$?;
+
+                ! grpcurl -plaintext {{ .Values.backend.services.inventory.endpoint }} spaceone.api.core.v1.ServerInfo/get_version;
+                inventory=$?;
+
+                ! grpcurl -plaintext {{ .Values.backend.services.monitoring.endpoint }} spaceone.api.core.v1.ServerInfo/get_version;
+                monitoring=$?;
+
+                ! grpcurl -plaintext {{ .Values.backend.services.repository.endpoint }} spaceone.api.core.v1.ServerInfo/get_version;
+                repository=$?;
+
+                ! grpcurl -plaintext {{ .Values.backend.services.plugin.endpoint }} spaceone.api.core.v1.ServerInfo/get_version;
+                plugin=$?;
+
+                ! grpcurl -plaintext {{ .Values.backend.services.secret.endpoint }} spaceone.api.core.v1.ServerInfo/get_version;
+                secret=$?;
+
+                ! grpcurl -plaintext {{ .Values.backend.services.statistics.endpoint }} spaceone.api.core.v1.ServerInfo/get_version;
+                statistics=$?;
+
+                if [[ $(( $config * $identity * $inventory * $monitoring * $repository * $plugin * $secret * $statistics )) -ne 0 ]];
+                then
+                  echo "Success. All microservices are available."
+                  break;
+                else
+                  echo "[Error] Failed to connect some microservices"
+                fi
+
+                sleep 1;
+              done
       containers:
-      - name: db
+      - name: job-1-set-mongo-db
         image: {{ .Values.mongo.image}}
         command:
           - sh
@@ -28,7 +76,7 @@ spec:
             name: initializer-conf
             subPath: init-db.js
 
-      - name: initialize
+      - name: job-2-initialize-spaceone
         image: {{ .Values.backend.services.identity.image }}
         command:
           - sh

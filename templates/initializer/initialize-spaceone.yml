@@ -1,0 +1,1 @@
+{{ tpl (.Files.Get "files/initialize-spaceone.yml") . }}

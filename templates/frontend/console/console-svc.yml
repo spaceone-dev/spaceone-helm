@@ -69,7 +69,7 @@ spec:
       protocol: TCP
       targetPort: 80
       {{- if and (or (eq .service.type "NodePort") (eq .service.type "LoadBalancer")) .service.nodePort }}
-      nodePort: {{ .service.nodePort }}
+      nodePort: {{ .service.nodePort }}z
       {{- end}}
     - name: https
       port: 443
