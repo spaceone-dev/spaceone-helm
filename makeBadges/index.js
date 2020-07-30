@@ -13,11 +13,7 @@ const format = {
 }
 
 const svg = makeBadge(format)
-svg2png(svg)
-  .then(function(buffer){
-    // console.log(buffer)
-    if(!fs.existsSync("./media")){
-      fs.mkdirSync("./media")
-    }
-    fs.writeFileSync("./media/version_info.png", buffer)
-  })
+if(!fs.existsSync("./media")){
+  fs.mkdirSync("./media")
+}
+fs.writeFileSync("./media/version_info.svg", svg)
