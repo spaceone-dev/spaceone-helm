@@ -1,1 +1,3 @@
+{{- if eq .Release.Revision 1 }}
 {{ tpl (.Files.Get "files/initialize-spaceone.yml") . }}
+{{- end }}
