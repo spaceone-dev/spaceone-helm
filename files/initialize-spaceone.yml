@@ -64,20 +64,19 @@ spec:
 
                 sleep 1;
               done
+        - name: job-1-set-mongo-db
+          image: {{ .Values.mongo.image}}
+          command:
+            - sh
+            - -c
+            - mongo --host {{ .Values.mongo.host }}:{{ .Values.mongo.port }} --username {{ .Values.mongo.username }} --password {{ .Values.mongo.password }} < /root/scripts/init-db.js
+          volumeMounts:
+            - mountPath: /root/scripts/init-db.js
+              name: initializer-conf
+              subPath: init-db.js
       containers:
-      - name: job-1-set-mongo-db
-        image: {{ .Values.mongo.image}}
-        command:
-          - sh
-          - -c
-          - mongo --host {{ .Values.mongo.host }}:{{ .Values.mongo.port }} --username {{ .Values.mongo.username }} --password {{ .Values.mongo.password }} < /root/scripts/init-db.js
-        volumeMounts:
-          - mountPath: /root/scripts/init-db.js
-            name: initializer-conf
-            subPath: init-db.js
-
       - name: job-2-initialize-spaceone
-        image: {{ .Values.backend.services.identity.image }}
+        image: {{ .Values.initializer.image }}
         command:
           - sh
           - /root/scripts/configmap/initialize.sh

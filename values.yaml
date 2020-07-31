@@ -4,9 +4,12 @@
 installedBy:
   author: jinsu
 
-namePrefix: "{{ .Realease.Name }}"
-namespace: default
+#namePrefix: "{{ .Realease.Name }}"
+
 gracePeriod: 3
+
+initializer:
+  image: spaceone/tester:latest
 
 mongo:
   enabled: true
@@ -319,6 +322,7 @@ supervisor:
       
   kubectlProxy:
     image: spaceone/kubectl-proxy
+
 
 #######
 # Vault reference : https://www.vaultproject.io/docs/platform/k8s/helm/configuration
