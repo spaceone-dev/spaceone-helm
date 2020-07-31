@@ -22,17 +22,7 @@ spec:
     {{- end }}
     {{- with .Values.frontend.console }}
   ports:
-    - name: http
-      port: 80
-      protocol: TCP
-      targetPort: 80
-      {{- if and (or (eq .service.type "NodePort") (eq .service.type "LoadBalancer")) .service.nodePort }}
-      nodePort: {{ .service.nodePort }}
-      {{- end}}
-    - name: https
-      port: 443
-      protocol: TCP
-      targetPort: 80
+{{ toYaml .service.ports | indent 4 }}
   selector:
     helm.stargate.spaceone.dev/service: console
   sessionAffinity: None
@@ -64,17 +54,7 @@ spec:
     {{- end }}
     {{- with .Values.frontend.root }}
   ports:
-    - name: http
-      port: 80
-      protocol: TCP
-      targetPort: 80
-      {{- if and (or (eq .service.type "NodePort") (eq .service.type "LoadBalancer")) .service.nodePort }}
-      nodePort: {{ .service.nodePort }}
-      {{- end}}
-    - name: https
-      port: 443
-      protocol: TCP
-      targetPort: 80
+{{ toYaml .service.ports | indent 4 }}
   selector:
     helm.stargate.spaceone.dev/service: console
   sessionAffinity: None

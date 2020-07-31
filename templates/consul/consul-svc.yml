@@ -11,15 +11,7 @@ metadata:
 spec:
   type: ClusterIP # connect ClusterIP to Nginx Ingress Controller
   ports:
-    - name: http
-      port: 80
-      targetPort: 8500
-      protocol: TCP
-
-    - name: httpd
-      port: 8500
-      targetPort: 8500
-      protocol: TCP
+{{ toYaml .Values.consul.service.ports | indent 4 }}
   selector:
     helm.stargate.spaceone.dev/service: consul
 {{ end }}

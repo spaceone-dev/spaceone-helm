@@ -15,9 +15,10 @@ data:
   {{- if eq .Values.frontend.consoleApi.protocol "https" }}
         "ENDPOINT": "https://{{ .Values.frontend.consoleApi.endpoint }}"
   {{- end }}
-
       },
       "GTAG_ID": "DISABLED",
+      "DOMAIN_NAME_REF": "{{ .Values.frontend.console.domainName.ref }}",
+      "DOMAIN_NAME": "{{ .Values.frontend.console.domainName.name }}",
       "NO_SERVER_MODE": false
     }
 {{ end }}

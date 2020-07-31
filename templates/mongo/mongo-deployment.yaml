@@ -16,7 +16,7 @@ spec:
   template:
     metadata:
       annotations:
-        spaceone.auto-deploy-flag: {{ include (print $.Template.BasePath "/mongo/conf.yml") . | sha256sum }}
+        spaceone.auto-deploy-flag: {{ include (print $.Template.BasePath "/mongo/mongo-conf.yml") . | sha256sum }}
       labels:
 {{ include "spaceone.labels" . | indent 8 }}
         helm.stargate.spaceone.dev/service: mongo

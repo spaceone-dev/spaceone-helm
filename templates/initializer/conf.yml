@@ -6,7 +6,6 @@ metadata:
   namespace: {{ .Release.Namespace }}
 data:
   initialize.sh: |
-    sleep 8
     echo START SPACEONE INITIALIZE
     cd /root/scripts/
     mkdir init

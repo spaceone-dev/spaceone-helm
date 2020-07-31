@@ -4,9 +4,12 @@
 installedBy:
   author: jinsu
 
-namePrefix: "{{ .Realease.Name }}"
-namespace: default
+#namePrefix: "{{ .Realease.Name }}"
+
 gracePeriod: 3
+
+initializer:
+  image: spaceone/tester:latest
 
 mongo:
   enabled: true
@@ -22,6 +25,11 @@ mongo:
     type: ClusterIP
     annotations:
       nil: nil
+    ports:
+      - name: mongo
+        port: 27017
+        targetPort: 27017
+        protocol: TCP
 
 redis:
   enabled: true
@@ -33,6 +41,11 @@ redis:
     type: ClusterIP
     annotations:
       nil: nil
+    ports:
+      - name: redis
+        port: 6379
+        targetPort: 6379
+        protocol: TCP
     
 
 consul:
@@ -44,7 +57,16 @@ consul:
     type: ClusterIP
     annotations:
       nil: nil
-    
+    ports:
+      - name: http
+        port: 80
+        targetPort: 8500
+        protocol: TCP
+
+      - name: httpd
+        port: 8500
+        targetPort: 8500
+        protocol: TCP
 
 backend:
   enabled: true
@@ -62,6 +84,11 @@ backend:
         type: ClusterIP
         annotations:
           nil: nil
+        ports:
+          - name: grpc
+            port: 50051
+            targetPort: 50051
+            protocol: TCP
 
     identity:
       enabled: true
@@ -71,6 +98,11 @@ backend:
         type: ClusterIP
         annotations:
           nil: nil
+        ports:
+          - name: grpc
+            port: 50051
+            targetPort: 50051
+            protocol: TCP
 
     inventory:
       enabled: true
@@ -80,6 +112,11 @@ backend:
         type: ClusterIP
         annotations:
           nil: nil
+        ports:
+          - name: grpc
+            port: 50051
+            targetPort: 50051
+            protocol: TCP
 
     inventoryWorker:
       enabled: true
@@ -88,6 +125,11 @@ backend:
         type: ClusterIP
         annotations:
           nil: nil
+        ports:
+          - name: grpc
+            port: 50051
+            targetPort: 50051
+            protocol: TCP
 
     inventoryScheduler:
       enabled: true
@@ -96,6 +138,11 @@ backend:
         type: ClusterIP
         annotations:
           nil: nil
+        ports:
+          - name: grpc
+            port: 50051
+            targetPort: 50051
+            protocol: TCP
 
     monitoring:
       enabled: true
@@ -105,6 +152,11 @@ backend:
         type: ClusterIP
         annotations:
           nil: nil
+        ports:
+          - name: grpc
+            port: 50051
+            targetPort: 50051
+            protocol: TCP
 
     plugin:
       enabled: true
@@ -114,6 +166,11 @@ backend:
         type: ClusterIP
         annotations:
           nil: nil
+        ports:
+          - name: grpc
+            port: 50051
+            targetPort: 50051
+            protocol: TCP
 
     repository:
       enabled: true
@@ -123,6 +180,11 @@ backend:
         type: ClusterIP
         annotations:
           nil: nil
+        ports:
+          - name: grpc
+            port: 50051
+            targetPort: 50051
+            protocol: TCP
 
     secret:
       enabled: true
@@ -132,6 +194,11 @@ backend:
         type: ClusterIP
         annotations:
           nil: nil
+        ports:
+          - name: grpc
+            port: 50051
+            targetPort: 50051
+            protocol: TCP
 
       awsSecretManagerConnector:
         awsAccessKeyId:
@@ -146,6 +213,11 @@ backend:
         type: ClusterIP
         annotations:
           nil: nil
+        ports:
+          - name: grpc
+            port: 50051
+            targetPort: 50051
+            protocol: TCP
 
     statisticsScheduler:
       enabled: true
@@ -154,6 +226,11 @@ backend:
         type: ClusterIP
         annotations:
           nil: nil
+        ports:
+          - name: grpc
+            port: 50051
+            targetPort: 50051
+            protocol: TCP
 
 
 frontend:
@@ -172,6 +249,19 @@ frontend:
         nil: nil
       extraSpec:
         nil: nil
+      ports:
+        - name: http
+          port: 80
+          targetPort: 80
+          protocol: TCP
+        - name: https
+          port: 443
+          targetPort: 80
+          protocol: TCP
+
+    domainName:
+      ref: config # hostname
+      name: root # megazone
 
   # this service let you access to console through http://root by kubefwd
   root:
@@ -183,6 +273,15 @@ frontend:
         nil: nil
       extraSpec:
         nil: nil
+      ports:
+        - name: http
+          port: 80
+          targetPort: 80
+          protocol: TCP
+        - name: https
+          port: 443
+          targetPort: 80
+          protocol: TCP
 
   consoleApi:
     enabled: true
@@ -190,18 +289,26 @@ frontend:
     protocol: http # https
     image: spaceone/console-api:latest
     service:
-      type: NodePort
+      type: ClusterIP
       annotations:
         nil: nil
       extraSpec:
         nil: nil
+      ports:
+        - name: http
+          port: 80
+          targetPort: 80
+          protocol: TCP
+        - name: https
+          port: 443
+          targetPort: 80
+          protocol: TCP
 
 
 supervisor:
   enabled: true
   imagePullPolicy: IfNotPresent
   supervisor:
-    endpoint: supervisor
     image: spaceone/supervisor:latest
     replicas: 1
     imagePullPolicy: IfNotPresent
@@ -212,13 +319,10 @@ supervisor:
       uri: debug/supervisor/TOKEN
     plugin:
       imageRepository: pyengine
-    service:
-      type: ClusterIP
-      annotations:
-        nil: nil
       
   kubectlProxy:
     image: spaceone/kubectl-proxy
+
 
 #######
 # Vault reference : https://www.vaultproject.io/docs/platform/k8s/helm/configuration

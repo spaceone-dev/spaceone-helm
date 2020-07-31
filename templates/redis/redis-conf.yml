@@ -1,0 +1,9 @@
+{{- if .Values.redis.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-conf
+  namespace: {{ .Release.Namespace }}
+data:
+  redis.conf: |
+{{- end }}

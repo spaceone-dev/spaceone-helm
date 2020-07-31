@@ -1,0 +1,16 @@
+{{- if .Values.redis.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "spaceone.labels" . | indent 4 }}
+    helm.stargate.spaceone.dev/service: redis
+spec:
+  type: NodePort
+  ports:
+{{ toYaml .Values.redis.service.ports | indent 4 }}
+  selector:
+    helm.stargate.spaceone.dev/service: redis
+{{- end }}

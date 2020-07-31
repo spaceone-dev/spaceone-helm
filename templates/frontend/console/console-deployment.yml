@@ -6,7 +6,7 @@ metadata:
   labels:
 {{ include "spaceone.labels" . | indent 4 }}
     helm.stargate.spaceone.dev/service: console
-  name: console-client
+  name: console
   namespace: {{ .Release.Namespace }}
 spec:
   replicas: {{ .Values.frontend.console.replicas }}

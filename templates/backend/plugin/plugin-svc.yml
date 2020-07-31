@@ -17,11 +17,7 @@ metadata:
 spec:
     {{- with .Values.backend.services.plugin }}
   ports:
-    - port: 50051
-      protocol: TCP
-      {{- if and (or (eq .service.type "NodePort") (eq .service.type "LoadBalancer")) .service.nodePort }}
-      nodePort: {{ .service.nodePort }}
-      {{- end}}
+{{ toYaml .service.ports | indent 4 }}
   selector:
     helm.stargate.spaceone.dev/service: plugin
   sessionAffinity: None
