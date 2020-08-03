@@ -326,7 +326,12 @@ supervisor:
   kubectlProxy:
     image: spaceone/kubectl-proxy
 
-
+ingress:
+  enabled: true
+  annotations:
+    nil: nil
+  tls:
+    enabled: true
 #######
 # Vault reference : https://www.vaultproject.io/docs/platform/k8s/helm/configuration
 #######

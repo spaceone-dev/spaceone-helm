@@ -72,7 +72,7 @@ spec:
             - mongo --host {{ .Values.mongo.host }}:{{ .Values.mongo.port }} --username {{ .Values.mongo.username }} --password {{ .Values.mongo.password }} < /root/scripts/init-db.js
           volumeMounts:
             - mountPath: /root/scripts/init-db.js
-              name: initializer-conf
+              name: initialize-spaceone-conf
               subPath: init-db.js
       containers:
       - name: job-2-initialize-spaceone
@@ -80,11 +80,18 @@ spec:
         imagePullPolicy: {{ .Values.initializer.imagePullPolicy}}
         command:
           - sh
-          - /root/scripts/configmap/initialize.sh
+          - /root/scripts/configmap/initialize-spaceone/initialize.sh
         volumeMounts:
-          - mountPath: /root/scripts/configmap
-            name: initializer-conf
+          - mountPath: /root/scripts/configmap/tester
+            name: tester-conf
+          - mountPath: /root/scripts/configmap/initialize-spaceone/initialize.sh
+            name: initialize-spaceone-conf
+            subPath: initialize.sh
+
       volumes:
-        - name: initializer-conf
+        - name: tester-conf
           configMap:
-            name: initializer-conf
+            name: tester-conf
+        - name: initialize-spaceone-conf
+          configMap:
+            name: initialize-spaceone-conf

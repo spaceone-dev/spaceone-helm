@@ -8,7 +8,7 @@ SpaceONE Chart execute initializing job automatically right after you installed 
 But you can also execute the initializing job manually by the following command.
 
 cat << EOF | kubectl apply -f -
-$(kubectl get cm -n {{ .Release.Namespace }} initializer-conf -o 'go-template={{ `{{index .data "initialize-spaceone.yml"}}` }}')
+$(kubectl get cm -n {{ .Release.Namespace }} initialize-spaceone-conf -o 'go-template={{ `{{index .data "initialize-spaceone.yml"}}` }}')
 EOF
 
 # Access to console service.
