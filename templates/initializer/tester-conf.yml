@@ -27,7 +27,7 @@ data:
     cp configmap/schema-scenario.json schema/scenario.json
     cp configmap/test_add_new_schema.py schema/test_add_new_schema.py
 
-    pip install --upgrade spaceone-api spaceone-tester spaceone-identity spaceone-core
+    pip install --upgrade spaceone-core spaceone-api spaceone-tester spacectl
 
     cd init
     spaceone test

@@ -1,0 +1,110 @@
+# deploy always
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: initializer-spaceone-conf
+  namespace: {{ .Release.Namespace }}
+data:
+  initialize.sh: |
+    echo START SPACEONE INITIALIZE
+    cd /root/scripts/
+    mkdir init
+    mkdir plugin
+    mkdir schema
+
+    # configmap directory is read only file system
+    # so we copy this to each directory
+
+    cp configmap/config.yml init/config.yml
+    cp configmap/init-scenario.json init/scenario.json
+    cp configmap/test_DomainOwner.py init/test_DomainOwner.py
+
+    cp configmap/config.yml plugin/config.yml
+    cp configmap/plugin-scenario.json plugin/scenario.json
+    cp configmap/test_add_new_plugin.py plugin/test_add_new_plugin.py
+
+    cp configmap/config.yml schema/config.yml
+    cp configmap/schema-scenario.json schema/scenario.json
+    cp configmap/test_add_new_schema.py schema/test_add_new_schema.py
+
+    pip install --upgrade spaceone-core spaceone-api spaceone-tester spacectl
+
+    cd init
+    spaceone test
+    cd ..
+
+    cd plugin
+    spaceone test
+    cd ..
+
+    cd schema
+    spaceone test
+    cd ..
+
+    echo FINISH SPACEONE INITIALIZE
+
+  init-db.js: |
+    db = db.getSiblingDB('dev-identity')
+    db.createUser(
+        {
+            user: "{{ .Values.mongo.username }}",
+            pwd: "{{ .Values.mongo.password }}",
+            roles: [ {role: "readWrite", db: "dev-identity" } ]
+        }
+    );
+
+    db = db.getSiblingDB('dev-inventory')
+    db.createUser(
+        {
+            user: "{{ .Values.mongo.username }}",
+            pwd: "{{ .Values.mongo.password }}",
+            roles: [ {role: "readWrite", db: "dev-inventory" } ]
+        }
+    );
+
+    db = db.getSiblingDB('dev-repository')
+    db.createUser(
+        {
+            user: "{{ .Values.mongo.username }}",
+            pwd: "{{ .Values.mongo.password }}",
+            roles: [ {role: "readWrite", db: "dev-repository" } ]
+        }
+    );
+
+    db = db.getSiblingDB('dev-plugin')
+    db.createUser(
+        {
+            user: "{{ .Values.mongo.username }}",
+            pwd: "{{ .Values.mongo.password }}",
+            roles: [ {role: "readWrite", db: "dev-plugin" } ]
+        }
+    );
+
+    db = db.getSiblingDB('dev-secret')
+    db.createUser(
+        {
+            user: "{{ .Values.mongo.username }}",
+            pwd: "{{ .Values.mongo.password }}",
+            roles: [ {role: "readWrite", db: "dev-secret" } ]
+        }
+    );
+
+    db = db.getSiblingDB('dev-marketplace')
+    db.createUser(
+        {
+            user: "{{ .Values.mongo.username }}",
+            pwd: "{{ .Values.mongo.password }}",
+            roles: [ {role: "readWrite", db: "dev-marketplace" } ]
+        }
+    );
+
+    db = db.getSiblingDB('dev-statistics')
+    db.createUser(
+        {
+            user: "{{ .Values.mongo.username }}",
+            pwd: "{{ .Values.mongo.password }}",
+            roles: [ {role: "readWrite", db: "dev-statistics" } ]
+        }
+    );
+  initialize-spaceone.yml: |
+{{ tpl (.Files.Get "files/initialize-spaceone.yml") . | indent 4 }}

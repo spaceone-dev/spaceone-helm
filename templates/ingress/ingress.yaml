@@ -1,0 +1,44 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+  {{- range $key, $value := .Values.ingress.annotations }}
+    {{- if not (eq $key "nil") }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
+  labels:
+{{ include "spaceone.labels" . | indent 4 }}
+    helm.stargate.spaceone.dev/service: ingress
+  name: alb-ingress
+  namespace: {{ .Release.Namespace }}
+spec:
+  tls:
+  - hosts:
+    - {{ .Values.frontend.console.host }}
+    - {{ .Values.frontend.consoleApi.endpoint }}
+
+  rules:
+    - http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: ssl-redirect
+              servicePort: use-annotation
+
+    - host: {{ .Values.frontend.console.host }}
+      http:
+        paths:
+          - backend:
+              serviceName: console
+              servicePort: 80
+            path: /*
+    - host: {{ .Values.frontend.consoleApi.endpoint }}
+      http:
+        paths:
+          - backend:
+              serviceName: console-api
+              servicePort: 80
+            path: /*
+{{- end }}
