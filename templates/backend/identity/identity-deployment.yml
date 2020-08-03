@@ -9,7 +9,7 @@ metadata:
   name: identity
   namespace: {{ .Release.Namespace }}
 spec:
-  replicas: {{ .Values.backend.replicas }}
+  replicas: 1
   revisionHistoryLimit: 3
   selector:
     matchLabels:

@@ -10,7 +10,7 @@ metadata:
   name: inventory-scheduler
   namespace: {{ .Release.Namespace }}
 spec:
-  replicas: {{ .Values.backend.replicas }}
+  replicas: 1
   revisionHistoryLimit: 3
   selector:
     matchLabels:
