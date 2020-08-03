@@ -10,7 +10,7 @@ metadata:
   name: inventory-worker
   namespace: {{ .Release.Namespace }}
 spec:
-  replicas: {{ .Values.backend.replicas }}
+  replicas: {{ .Values.backend.services.inventoryWorker.replicas | int }}
   revisionHistoryLimit: 3
   selector:
     matchLabels:

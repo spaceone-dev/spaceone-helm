@@ -122,6 +122,7 @@ backend:
     inventoryWorker:
       enabled: true
       image: spaceone/inventory:latest
+      replicas: 2
       service:
         type: ClusterIP
         annotations:
@@ -320,6 +321,7 @@ supervisor:
       uri: debug/supervisor/TOKEN
     plugin:
       imageRepository: pyengine
+      replicas: "{{ .Values.backend.services.inventoryWorker.replicas }}"
       
   kubectlProxy:
     image: spaceone/kubectl-proxy

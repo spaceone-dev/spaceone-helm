@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: {{ .Values.frontend.ingress.class }}
+    alb.ingress.kubernetes.io/certificate-arn: {{ .Values.frontend.ingress.cert.arn }}
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/inbound-cidrs: {{ .Values.frontend.ingress.inboundCirds }}
+    alb.ingress.kubernetes.io/scheme: {{ .Values.frontend.ingress.scheme }} # internet-facing
+    alb.ingress.kubernetes.io/target-type: instance
+  labels:
+{{ include "spaceone.labels" . | indent 4 }}
+    helm.stargate.spaceone.dev/service: frontend
+  name: frontend-ingress
+  namespace: {{ .Release.Namespace }}
+spec:
+  tls:
+  - hosts:
+    - '*.console.doodle.spaceone.dev'
+
+  rules:
+    - host: '*.console.doodle.spaceone.dev'
+      http:
+        paths:
+          - backend:
+              serviceName: console-client
+              servicePort: 80
+            path: /*
