@@ -10,30 +10,34 @@ Manage your infrastructure with SpaceONE. It doesn't matter what your infrastruc
 
 ### Requirements
 
-* `kubefwd` or any environments provided `port-forward`
 * a `Kubernetes` Cluster.(minikube, EKS, ...)
-* Some configurations in `values.yaml`
+* port-forwarded environments(Recommendations - `kubefwd` or `kubectl`)
+* ❗️Some configurations in `values.yaml`
   * AWS Credentials for AWS SecretManager in `backend.services.secret.awsSecretManagerConnector`
+  * `console-api` endpoint in `frontend.consoleApi.endpoint`
+  * console-api protocol(e.g. `http` or `https`) in `frontend.consoleApi.protocol`
 
 ### Commands
-
-> ⚠️  `inventory-scheduler` and `statistics-scheduler` doesn't work fine until you execute `initialize-spaceone` which is a Kubernetes `Job`. Please create the `Job` after reading the following commands. Those pods like `inventory-scheduler` or `statistics-scheduler` has some labels like `helm.stargate.spaceone.dev/need_initialization!=true`
-
-You should input your aws credentials which have permissions for AWS Secret Mananger in `values.yaml`
 
 ```
 $ helm repo add spaceone https://helm.stargate.spaceone.dev
 $ helm repo update
 $ helm install sp spaceone/spaceone -f values.yaml
-$ kubectl get pod -n sp -l "helm.stargate.spaceone.dev/need_initialization!=true"
 
 $ sudo kubefwd svc -n default # this command can be replaced with any codes to execute the same job.
 ```
 
-👽 After every pod except for `inventory-scheduler` and `statistics-scheduler` gets ready, you should create a Kubernetes `Job` named `initialize-spaceone` to initialize data. You can see the manifest for the `Job` by the following commands.
+If you want to see some commands or instructions, use `helm get notes {{RELEASE_NAME}}`
+
+> The NOTES in this chart includes useful and customized commands for your release.
+>
+> It also includes a command that lest you execute an initailizing job manually.
+
 ```
-helm get notes sp
+$ helm get notes sp
 # OR replace sp with your release name.
+...
+NOTES:
 ```
 
 You can see the console page via http://root
@@ -56,6 +60,44 @@ backend:
         regionName: PLEASE_INPUT_YOUR_AWS_CREDENTIALS
 ```
 
+You can also use either NLB or ALB for `console` and `console-api`.
+
+#### Using NLB
+
+```
+# values.yaml
+backend:
+  services:
+    secret: 
+    	... # some configurations
+frontend:
+  console:
+    host: YOUR_CONSOLE_HOST_NAME # e.g. console.xxx.xxx
+    service:
+      type: LoadBalancer
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+        service.beta.kubernetes.io/aws-load-balancer-ssl-cert: YOUR_ACM_CRETIFICATE_ARN
+        service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+      extraSpec: # extra spec for the service
+        # loadBalancerSourceRanges: [YOUR_DESIRED_CIDRS]
+  consoleApi:
+    endpoint: YOUR_CONSOLE_API_ENDPOINT # e.g. console-api.xxx.xxx
+    protocol: https # the protocol that your console will use
+    service:
+      type: LoadBalancer
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+        service.beta.kubernetes.io/aws-load-balancer-ssl-cert: YOUR_ACM_CRETIFICATE_ARN
+        service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+      extraSpec: # extra spec for the service
+        # loadBalancerSourceRanges: [YOUR_DESIRED_CIDRS]
+```
+
+#### Using ALB
+
+This will be appended soon.
+
 ### 2. Deploy this chart with your own SpaceONE micro services.
 
 ```
@@ -69,7 +111,7 @@ backend:
       endpoint: PLEASE_INPUT_YOUR_HOST:YOUR_PORT
 ```
 
-### 3. Deploy this chart with your own Databases
+### 3. Deploy this chart with your own Databases.
 
 ```
 # values.yaml
@@ -83,7 +125,9 @@ mongo:
   port: PLEASE_INPUT_YOUR_MONGO_PORT
 ```
 
-### 4. Develop your own plugin with this chart
+TLS connection and documentDB will be supported soon.
+
+### 4. Develop your own plugin with this chart.
 
 This will be appended soon.
 

@@ -10,6 +10,7 @@ gracePeriod: 3
 
 initializer:
   image: spaceone/tester:latest
+  imagePullPolicy: IfNotPresent
 
 mongo:
   enabled: true
