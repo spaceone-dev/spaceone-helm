@@ -249,7 +249,7 @@ This will be appended soon.
 
 ## Release History
 
-- 0.1.5
+- 1.1.4
   - no need to set console hostname as `root`.
   - Trigger `initialize-spaceone` automatically
     - waits for microservices are ready and then execute the initalizing job.
