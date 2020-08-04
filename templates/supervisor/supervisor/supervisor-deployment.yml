@@ -35,11 +35,21 @@ spec:
               mountPath: /opt/spaceone/supervisor/config/supervisor.yml
               subPath: supervisor.yml
               readOnly: true
+            - name: supervisor-conf
+              mountPath: /opt/spaceone/supervisor/scripts/liveness-probe.sh
+              subPath: liveness-probe.sh
             - name: log-volume
               mountPath: /logs
           env:
             - name: SPACEONE_CONFIG_FILE
               value: /opt/spaceone/supervisor/config/supervisor.yml
+          livenessProbe:
+            exec:
+              command:
+                - bash
+                - /opt/spaceone/supervisor/scripts/liveness-probe.sh
+            failureThreshold: 1
+            periodSeconds: 5
         - name: kubectl-proxy
           image: {{ .Values.supervisor.kubectlProxy.image }}
           ports:

@@ -62,4 +62,7 @@ data:
           queue: default_q
       TOKEN_INFO:
 {{ tpl (toYaml .Values.supervisor.supervisor.token) . | indent 8 }}
+  liveness-probe.sh: |
+    # ref: https://stackoverflow.com/a/39214806/9471220
+    exec 3<>/dev/tcp/{{ .Values.redis.host }}/{{ .Values.redis.port}} && echo -e "PING\r\n" >&3 && head -c 7 <&3
 {{ end }}
