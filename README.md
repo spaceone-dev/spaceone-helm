@@ -42,7 +42,7 @@ NOTES:
 
 You can see the console page via http://root
 
-## Usage examples
+## Configuration examples
 
 ### 1. Deploy the whole SpaceONE service with this chart.
 
@@ -59,44 +59,6 @@ backend:
         awsSecretAccessKey: PLEASE_INPUT_YOUR_AWS_CREDENTIALS
         regionName: PLEASE_INPUT_YOUR_AWS_CREDENTIALS
 ```
-
-You can also use either NLB or ALB for `console` and `console-api`.
-
-#### Using NLB
-
-```
-# values.yaml
-backend:
-  services:
-    secret: 
-    	... # some configurations
-frontend:
-  console:
-    host: YOUR_CONSOLE_HOST_NAME # e.g. console.xxx.xxx
-    service:
-      type: LoadBalancer
-      annotations:
-        service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
-        service.beta.kubernetes.io/aws-load-balancer-ssl-cert: YOUR_ACM_CRETIFICATE_ARN
-        service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
-      extraSpec: # extra spec for the service
-        # loadBalancerSourceRanges: [YOUR_DESIRED_CIDRS]
-  consoleApi:
-    endpoint: YOUR_CONSOLE_API_ENDPOINT # e.g. console-api.xxx.xxx
-    protocol: https # the protocol that your console will use
-    service:
-      type: LoadBalancer
-      annotations:
-        service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
-        service.beta.kubernetes.io/aws-load-balancer-ssl-cert: YOUR_ACM_CRETIFICATE_ARN
-        service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
-      extraSpec: # extra spec for the service
-        # loadBalancerSourceRanges: [YOUR_DESIRED_CIDRS]
-```
-
-#### Using ALB
-
-This will be appended soon.
 
 ### 2. Deploy this chart with your own SpaceONE micro services.
 
@@ -131,9 +93,155 @@ TLS connection and documentDB will be supported soon.
 
 This will be appended soon.
 
+
+
 ## Development guides
 
-This will be appended soon.
+### How to expose your SpaceONE
+
+> We will omit the configuration for `backend.services.secret.awsSecretManagerConnector` in `values.yaml` for convenience BUT you should configure it in your `values.yaml`.
+
+You can use `kubectl port-forward`, `kubefwd`, `NLB`, or `Ingress`. If you need the customized codes for your environemnts, try ` helm get notes sp`. 
+
+**The Default Example Environment**
+
+| repository | namespace | release |
+| ---------- | --------- | ------- |
+| spaceone   | default   | sp      |
+
+#### Option a. `kubectl port-forward`, the most common method
+
+| console.host   | console-api.endpoint |
+| -------------- | -------------------- |
+| localhost:8080 | localhost:9090       |
+
+```
+# values.yaml
+backend:
+  ... # omitted for convenience
+frontend:
+  console:
+    host: localhost:8080
+  consoleApi:
+    host: localhost:9090
+    protocol: http
+```
+
+```
+$ helm install sp spaceone/spaceone -n default -f values.yaml
+$ kubectl portforward -n default svc/console 8080:80
+$ kubectl portforward -n default svc/console-api 9090:80
+```
+
+🌟 Then access to http://localhost:8080
+
+#### Option b. `kubefwd`, the easiest and the most convenient method
+
+> This requires [`kubefwd`](https://github.com/txn2/kubefwd) )
+
+| console.host | console-api.endpoint |
+| ------------ | -------------------- |
+| console      | console-api          |
+
+```
+# values.yaml
+
+backend:
+  ... # omitted for convenience
+```
+
+``` 
+$ helm install sp spaceone/spaceone -n default -f values.yaml
+$ sudo kubefwd svc -n default
+```
+
+🌟 Then access to http://console
+
+#### Obtion c. NLB
+
+> You can either enable or disable tls by using annotations. You can see detailed contents in the [kubernetes official docs](https://kubernetes.io/ko/docs/concepts/services-networking/service/#ssl-support-on-aws).
+
+| console.host                      | consoleApi.endpoint              | ssl port | ELB type |
+| --------------------------------- | -------------------------------- | -------- | -------- |
+| root.console.example.spaceone.dev | console-api.example.spaceone.dev | 443      | nlb      |
+
+```
+# values.yaml
+backend: 
+  ... # some configurations
+frontend:
+  console:
+    host: root.console.example.spaceone.dev # This should be replaced with your domain name.
+    service:
+      type: LoadBalancer
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+        service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:... # This should be replaced with your Certificate arn
+        service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+      extraSpec: # extra spec for the service if you need
+        # loadBalancerSourceRanges: [YOUR_DESIRED_CIDRS]
+  consoleApi:
+    endpoint: console-api.example.spaceone.dev  # This should be replaced with your domain name.
+    protocol: https # http, the protocol that your console will use.
+    service:
+      type: LoadBalancer
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+        service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:... # This should be replaced with your Certificate arn
+        service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+      extraSpec: # extra spec for the service if you need
+        # loadBalancerSourceRanges: [YOUR_DESIRED_CIDRS]
+```
+
+```
+$ helm install sp spaceone/spaceone -n default -f values.yaml
+
+# create Route53 record for your new allocated NLB.
+```
+
+🌟 Then access to your domain you configured in `console.host`.(e.g. https://root.console.example.spaceone.dev)
+
+#### Option d. Ingress
+
+> You should install `alb-controller` ahead. `console` and `console-api` services should be set as `NodePort` service.
+>
+> You can either enable or disable `tls`. Annotations and ingress class depends on your environments.
+
+| console.host                      | consoleApi.endpoint              | consoleApi.protocol | SSL port | Ingress class | Certificate | Inbound            |
+| --------------------------------- | -------------------------------- | ------------------- | -------- | ------------- | ----------- | ------------------ |
+| root.console.example.spaceone.dev | console-api.example.spaceone.dev | Https               | 443      | ALB           | AWC ACM     | 123.123.123.123/32 |
+
+```
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/inbound-cidrs: 123.123.123.123/32 # replace or leave out
+    alb.ingress.kubernetes.io/scheme: "internet-facing" # internet-facing
+    alb.ingress.kubernetes.io/target-type: instance # Your console and console-api should be NodePort for this configuration.
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:... # This should be replaced with your cert arn.
+
+frontend:
+  console:
+    host: root.console.example.spaceone.dev
+    service:
+      type: NodePort
+  consoleApi:
+    endpoint: console-api.example.spaceone.dev
+    protocol: https # or http
+    service:
+      type: NodePort
+```
+
+```
+$ helm install sp spaceone/spaceone -n default -f values.yaml
+
+# # create Route53 record for your new allocated ALB.
+```
+
+🌟 Then access to your domain you configured in `console.host`.(e.g. https://root.console.example.spaceone.dev)
 
 ## Configurations
 
@@ -142,7 +250,16 @@ This will be appended soon.
 ## Release History
 
 - 0.1.5
-  - 
+  - no need to set console hostname as `root`.
+  - Trigger `initialize-spaceone` automatically
+    - waits for microservices are ready and then execute the initalizing job.
+    - introduced multiple inventory worker
+  - ingress and nlb is supported. ( for `console`, `console-api`)
+  - Changed names of objects 
+    - `wconsole-client` => `console`
+    - `wconsole-server`=>`console-api`
+    - `initialize-conf`=>`initialize-spaceone-conf`, `tester-conf`, `spacectl-conf`
+  - a specified tag for image (only `console`)
 - 0.1.4
   - Support extraSpec to `Service` (e.g. .spec.loadBalancerSourceRanges)
     - only available in `Frontend`
@@ -156,7 +273,7 @@ This will be appended soon.
 - 0.1.0
   - Initial version.
 
-## Metadata
+## Maintainers
 
 [@umi0410](https://github.com/umi0410) – bo314@naver.com
 
