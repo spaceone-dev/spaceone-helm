@@ -44,8 +44,8 @@ data:
     cd /root
     TOKEN=$(curl http://consul/v1/kv/debug/supervisor/TOKEN?raw=true)
     echo api_key: $(curl curl http://consul/v1/kv/debug/supervisor/TOKEN?raw=true)>>/root/.spaceone/environments/helm-root.yml
-    spacectl list domain -q -c domain_id
 
+    # spacectl list domain -q -c domain_id
     # This will be added after spacectl upgraded.s
     # DOMAIN_ID=$(spacectl list domain -c domain_id -q -p name=root)
     # REPOSITORY_ID=$(spacectl list repository  -c repository_id -q -p 'domain_id=$DOMAIN_ID')

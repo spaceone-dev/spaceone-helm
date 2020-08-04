@@ -25,7 +25,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.gracePeriod }}
       containers:
         - name: console
-          image: {{ .Values.frontend.console.image }}
+          image: {{ .Values.frontend.console.image }}:{{ .Values.frontend.console.tag }}
           imagePullPolicy: {{ .Values.frontend.imagePullPolicy }}
           env:
             - name: NODE_ENV

@@ -243,7 +243,8 @@ frontend:
 
   console:
     enabled: true
-    image: spaceone/console:latest
+    image: spaceone/console
+    tag: 1.1.4
     host: console
     service:
       type: ClusterIP
@@ -327,7 +328,7 @@ supervisor:
     image: spaceone/kubectl-proxy
 
 ingress:
-  enabled: true
+  enabled: false
   annotations:
     nil: nil
   tls:
