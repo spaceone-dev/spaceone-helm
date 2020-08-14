@@ -12,7 +12,7 @@ Manage your infrastructure with SpaceONE. It doesn't matter what your infrastruc
 
 * a `Kubernetes` Cluster.(minikube, EKS, ...)
 * port-forwarded environments(Recommendations - `kubefwd` or `kubectl`)
-* ❗️Some configurations in `values.yaml`
+* ❗️ Some configurations in `values.yaml`
   * AWS Credentials for AWS SecretManager in `backend.services.secret.awsSecretManagerConnector`
   * `console-api` endpoint in `frontend.consoleApi.endpoint`
   * console-api protocol(e.g. `http` or `https`) in `frontend.consoleApi.protocol`
@@ -40,7 +40,7 @@ $ helm get notes sp
 NOTES:
 ```
 
-You can see the console page via http://root
+You can see the console page via `default:service/console`
 
 ## Configuration examples
 
@@ -55,9 +55,9 @@ backend:
   services:
     secret:
       awsSecretManagerConnector:
-        awsAccessKeyId: PLEASE_INPUT_YOUR_AWS_CREDENTIALS
-        awsSecretAccessKey: PLEASE_INPUT_YOUR_AWS_CREDENTIALS
-        regionName: PLEASE_INPUT_YOUR_AWS_CREDENTIALS
+        awsAccessKeyId: PLEASE_INPUT_YOUR_AWS_ACCESS_KEY_ID
+        awsSecretAccessKey: PLEASE_INPUT_YOUR_AWS_SECRET_ACCESS_KEY
+        regionName: PLEASE_INPUT_YOUR_AWS_REGION_NAME
 ```
 
 ### 2. Deploy this chart with your own SpaceONE micro services.
@@ -123,14 +123,14 @@ frontend:
   console:
     host: localhost:8080
   consoleApi:
-    host: localhost:9090
+    endpoint: localhost:9090
     protocol: http
 ```
 
 ```
 $ helm install sp spaceone/spaceone -n default -f values.yaml
-$ kubectl portforward -n default svc/console 8080:80
-$ kubectl portforward -n default svc/console-api 9090:80
+$ kubectl port-forward -n default svc/console 8080:80
+$ kubectl port-forward -n default svc/console-api 9090:80
 ```
 
 🌟 Then access to http://localhost:8080
