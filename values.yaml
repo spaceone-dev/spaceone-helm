@@ -79,7 +79,7 @@ backend:
   services:
     config:
       enabled: true
-      image: spaceone/config:latest
+      image: spaceone/config:1.2.1
       endpoint: config:50051
       service:
         type: ClusterIP
@@ -93,7 +93,7 @@ backend:
 
     identity:
       enabled: true
-      image: spaceone/identity:latest
+      image: spaceone/identity:1.2.1
       endpoint: identity:50051
       service:
         type: ClusterIP
@@ -107,7 +107,7 @@ backend:
 
     inventory:
       enabled: true
-      image: spaceone/inventory:latest
+      image: spaceone/inventory:1.2.1
       endpoint: inventory:50051
       service:
         type: ClusterIP
@@ -121,7 +121,7 @@ backend:
 
     inventoryWorker:
       enabled: true
-      image: spaceone/inventory:latest
+      image: spaceone/inventory:1.2.1
       replicas: 2
       service:
         type: ClusterIP
@@ -135,7 +135,7 @@ backend:
 
     inventoryScheduler:
       enabled: true
-      image: spaceone/inventory:latest
+      image: spaceone/inventory:1.2.1
       service:
         type: ClusterIP
         annotations:
@@ -148,7 +148,7 @@ backend:
 
     monitoring:
       enabled: true
-      image: spaceone/monitoring:latest
+      image: spaceone/monitoring:1.2.1
       endpoint: monitoring:50051
       service:
         type: ClusterIP
@@ -162,7 +162,7 @@ backend:
 
     plugin:
       enabled: true
-      image: spaceone/plugin:latest
+      image: spaceone/plugin:1.2.1
       endpoint: plugin:50051
       service:
         type: ClusterIP
@@ -176,7 +176,7 @@ backend:
 
     repository:
       enabled: true
-      image: spaceone/repository:latest
+      image: spaceone/repository:1.2.1
       endpoint: repository:50051
       service:
         type: ClusterIP
@@ -190,7 +190,7 @@ backend:
 
     secret:
       enabled: true
-      image: spaceone/secret:latest
+      image: spaceone/secret:1.2.1
       endpoint: secret:50051
       service:
         type: ClusterIP
@@ -209,7 +209,7 @@ backend:
 
     statistics:
       enabled: true
-      image: spaceone/statistics:latest
+      image: spaceone/statistics:1.2.1
       endpoint: statistics:50051
       service:
         type: ClusterIP
@@ -223,7 +223,7 @@ backend:
 
     statisticsScheduler:
       enabled: true
-      image: spaceone/statistics:latest
+      image: spaceone/statistics:1.2.1
       service:
         type: ClusterIP
         annotations:
@@ -290,7 +290,7 @@ frontend:
     enabled: true
     endpoint: console-api
     protocol: http # https
-    image: spaceone/console-api:latest
+    image: spaceone/console-api:1.2.1
     service:
       type: ClusterIP
       annotations:
@@ -312,7 +312,7 @@ supervisor:
   enabled: true
   imagePullPolicy: IfNotPresent
   supervisor:
-    image: spaceone/supervisor:latest
+    image: spaceone/supervisor:1.2.1
     replicas: 1
     imagePullPolicy: IfNotPresent
     token: # yaml for TOKEN or TOKEN_INFO
