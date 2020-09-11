@@ -6,8 +6,6 @@ metadata:
   namespace: {{ .Release.Namespace }}
 data:
   initialize.sh: |
-
-
     echo START SPACEONE INITIALIZE
 
     echo INSTALL Mongo Shell
@@ -24,4 +22,4 @@ data:
 
     echo FINISH SPACEONE INITIALIZE
   initialize-spaceone.yml: |
-{{ tpl (.Files.Get "files/initialize-spaceone.yml") . | indent 4 }}
+{{ tpl (.Files.Get "files/initialize-spaceone/initialize-spaceone.yml") . | indent 4 }}

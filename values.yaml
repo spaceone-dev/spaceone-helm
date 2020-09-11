@@ -1,12 +1,8 @@
 # Default values for spaceone.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-installedBy:
-  author: jinsu
 
-#namePrefix: "{{ .Realease.Name }}"
-
-gracePeriod: 3
+gracePeriod: 3 # for dev, long gracePeriod is useless
 
 initializer:
   image: umi0410/spacectl:1.2.2
@@ -47,7 +43,7 @@ redis:
         port: 6379
         targetPort: 6379
         protocol: TCP
-    
+
 
 consul:
   enabled: true
@@ -93,7 +89,7 @@ backend:
 
     identity:
       enabled: true
-      image: spaceone/identity:1.2.2
+      image: spaceone/identity:1.2.2.1
       endpoint: identity:50051
       service:
         type: ClusterIP
@@ -107,7 +103,7 @@ backend:
 
     inventory:
       enabled: true
-      image: spaceone/inventory:1.2.2
+      image: spaceone/inventory:1.2.2.1
       endpoint: inventory:50051
       service:
         type: ClusterIP
@@ -121,7 +117,7 @@ backend:
 
     inventoryWorker:
       enabled: true
-      image: spaceone/inventory:1.2.2
+      image: spaceone/inventory:1.2.2.1
       replicas: 2
       service:
         type: ClusterIP
@@ -135,7 +131,7 @@ backend:
 
     inventoryScheduler:
       enabled: true
-      image: spaceone/inventory:1.2.2
+      image: spaceone/inventory:1.2.2.1
       service:
         type: ClusterIP
         annotations:
@@ -244,7 +240,7 @@ frontend:
   console:
     enabled: true
     image: spaceone/console
-    tag: 1.2.1
+    tag: 1.2.2-3
     host: console
     service:
       type: ClusterIP
@@ -303,7 +299,7 @@ supervisor:
     plugin:
       imageRepository: pyengine
       replicas: "{{ .Values.backend.services.inventoryWorker.replicas }}"
-      
+
   kubectlProxy:
     image: spaceone/kubectl-proxy
 

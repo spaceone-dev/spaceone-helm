@@ -9,20 +9,10 @@ data:
   production.json: |
     {
       "CONSOLE_API": {
-    {{- if eq .Values.frontend.consoleApi.protocol "http" }}
-        "ENDPOINT": "http://{{ .Values.frontend.consoleApi.endpoint }}"
-    {{- end }}
-    {{- if eq .Values.frontend.consoleApi.protocol "https" }}
-        "ENDPOINT": "https://{{ .Values.frontend.consoleApi.endpoint }}"
-    {{- end }}
+        "ENDPOINT": "{{ .Values.frontend.consoleApi.protocol }}://{{ .Values.frontend.consoleApi.endpoint }}"
       },
       "VUE_APP_API": {
-    {{- if eq .Values.frontend.consoleApi.protocol "http" }}
-        "ENDPOINT": "http://{{ .Values.frontend.consoleApi.endpoint }}"
-    {{- end }}
-    {{- if eq .Values.frontend.consoleApi.protocol "https" }}
-        "ENDPOINT": "https://{{ .Values.frontend.consoleApi.endpoint }}"
-    {{- end }}
+        "ENDPOINT": "{{ .Values.frontend.consoleApi.protocol }}://{{ .Values.frontend.consoleApi.endpoint }}"
       },
       "GTAG_ID": "DISABLED",
       "DOMAIN_NAME_REF": "{{ .Values.frontend.console.domainName.ref }}",

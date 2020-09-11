@@ -18,13 +18,14 @@ spec:
       restartPolicy: OnFailure
       initContainers:
         - name: job-0-msa-health-check
-          image: umi0410/grpcurl
+          image: networld/grpcurl
           imagePullPolicy: Always
           # runs for 15 seconds; echoes job name and timestamp
           command:
             - sh
             - -c
             - >
+              cp /grpcurl /usr/local/bin/grpcurl;
               while true;
               do
 
