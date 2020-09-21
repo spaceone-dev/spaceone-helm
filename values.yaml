@@ -5,13 +5,13 @@
 gracePeriod: 3 # for dev, long gracePeriod is useless
 
 initializer:
-  image: umi0410/spacectl:1.2.2
+  image: spaceone/spacectl:1.2.2
   imagePullPolicy: Always
 
 mongo:
   enabled: true
   initialize: true
-  image: mongo
+  image: mongo:4.4
   replicas: 1
   imagePullPolicy: IfNotPresent
   username: mongouser
@@ -75,7 +75,7 @@ backend:
   services:
     config:
       enabled: true
-      image: spaceone/config:1.2.2
+      image: spaceone/config:1.3.1.1
       endpoint: config:50051
       service:
         type: ClusterIP
@@ -89,7 +89,7 @@ backend:
 
     identity:
       enabled: true
-      image: spaceone/identity:1.2.2.1
+      image: spaceone/identity:1.3.1
       endpoint: identity:50051
       service:
         type: ClusterIP
@@ -103,7 +103,7 @@ backend:
 
     inventory:
       enabled: true
-      image: spaceone/inventory:1.2.2.1
+      image: spaceone/inventory:1.3.1
       endpoint: inventory:50051
       service:
         type: ClusterIP
@@ -117,7 +117,7 @@ backend:
 
     inventoryWorker:
       enabled: true
-      image: spaceone/inventory:1.2.2.1
+      image: spaceone/inventory:1.3.1
       replicas: 2
       service:
         type: ClusterIP
@@ -131,7 +131,7 @@ backend:
 
     inventoryScheduler:
       enabled: true
-      image: spaceone/inventory:1.2.2.1
+      image: spaceone/inventory:1.3.1
       service:
         type: ClusterIP
         annotations:
@@ -144,7 +144,7 @@ backend:
 
     monitoring:
       enabled: true
-      image: spaceone/monitoring:1.2.2
+      image: spaceone/monitoring:1.3.1
       endpoint: monitoring:50051
       service:
         type: ClusterIP
@@ -158,7 +158,7 @@ backend:
 
     plugin:
       enabled: true
-      image: spaceone/plugin:1.2.2
+      image: spaceone/plugin:1.3.1
       endpoint: plugin:50051
       service:
         type: ClusterIP
@@ -172,7 +172,7 @@ backend:
 
     repository:
       enabled: true
-      image: spaceone/repository:1.2.2
+      image: spaceone/repository:1.3.1.1
       endpoint: repository:50051
       service:
         type: ClusterIP
@@ -186,7 +186,7 @@ backend:
 
     secret:
       enabled: true
-      image: spaceone/secret:1.2.2
+      image: spaceone/secret:1.3.1
       endpoint: secret:50051
       service:
         type: ClusterIP
@@ -199,13 +199,13 @@ backend:
             protocol: TCP
 
       awsSecretManagerConnector:
-        awsAccessKeyId:
-        awsSecretAccessKey:
-        regionName: ap-northeast-2
+        awsAccessKeyId: # fill in
+        awsSecretAccessKey: # fill in
+        regionName: # fill in
 
     statistics:
       enabled: true
-      image: spaceone/statistics:1.2.2
+      image: spaceone/statistics:1.3.1
       endpoint: statistics:50051
       service:
         type: ClusterIP
@@ -219,7 +219,7 @@ backend:
 
     statisticsScheduler:
       enabled: true
-      image: spaceone/statistics:1.2.2
+      image: spaceone/statistics:1.3.1
       service:
         type: ClusterIP
         annotations:
@@ -240,7 +240,7 @@ frontend:
   console:
     enabled: true
     image: spaceone/console
-    tag: 1.2.2-3
+    tag: 1.3.1
     host: console
     service:
       type: ClusterIP
@@ -266,7 +266,7 @@ frontend:
     enabled: true
     endpoint: console-api
     protocol: http # https
-    image: spaceone/console-api:1.2.2
+    image: spaceone/console-api:1.3.1
     service:
       type: ClusterIP
       annotations:
@@ -288,7 +288,7 @@ supervisor:
   enabled: true
   imagePullPolicy: IfNotPresent
   supervisor:
-    image: spaceone/supervisor:1.2.2
+    image: spaceone/supervisor:1.3.1
     replicas: 1
     imagePullPolicy: IfNotPresent
     token: # yaml for TOKEN or TOKEN_INFO
@@ -309,6 +309,8 @@ ingress:
     nil: nil
   tls:
     enabled: true
+
+
 #######
 # Vault reference : https://www.vaultproject.io/docs/platform/k8s/helm/configuration
 #######

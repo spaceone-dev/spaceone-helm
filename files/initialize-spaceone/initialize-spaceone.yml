@@ -86,7 +86,7 @@ spec:
       containers:
       - name: job-2-initialize-spaceone
 #        image: {{ .Values.initializer.image }}
-        image: umi0410/spacectl:1.2.2
+        image: spaceone/spacectl:1.2.2
         imagePullPolicy: Always
 #        imagePullPolicy: {{ .Values.initializer.imagePullPolicy}}
         command:

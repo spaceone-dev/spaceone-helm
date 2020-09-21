@@ -1,9 +1,8 @@
 import:
   - mongo.yaml
   - root_domain.yaml
-  - repository.yaml
-  - schema.yaml
-  - plugin_endpoint.yaml
+  - repository_only_local.yaml
+# - repository_with_remote.yaml
 
 
 var:

@@ -1,0 +1,74 @@
+tasks:
+  - name: Create Repository
+    id: repository
+    uses: "@modules/resource"
+    spec:
+      resource_type: repository.Repository
+      data:
+        domain_id: ${{ tasks.domain.output.domain_id }}
+        name: ${{ var.domain_name }}
+        repository_type: local
+      matches:
+        - domain_id
+        - name
+      mode: NO_UPDATE
+      verb:
+        create: register
+
+  - name: Create a Supervisor API Key
+    id: supervisor_api_key
+    uses: "@modules/resource"
+    spec:
+      resource_type: identity.APIKey
+      data:
+        domain_id: ${{ tasks.domain.output.domain_id }}
+        user_id: ${{ var.username }}
+        api_key_type: USER
+      matches:
+        - domain_id
+      mode: EXEC
+      verb:
+        exec: create
+
+  - name: Consul Supervisor API Key
+    uses: "@modules/shell"
+    spec:
+      run: |
+        curl -X PUT http://consul/v1/kv/debug/supervisor/TOKEN -d '${{ tasks.supervisor_api_key.output.api_key }}'
+
+  - name: Create secret
+    id: market_token
+    uses: "@modules/resource"
+    spec:
+      resource_type: secret.Secret
+      data:
+        domain_id: ${{ tasks.domain.output.domain_id }}
+        name: marketplace_token
+        data:
+          token: # fill in
+        secret_type: CREDENTIALS
+      matches:
+        - domain_id
+        - name
+      mode: NO_UPDATE
+      verb:
+        create: create
+
+  - name: Create MarketPlace
+    id: repository2
+    uses: "@modules/resource"
+    spec:
+      resource_type: repository.Repository
+      data:
+        domain_id: ${{ tasks.domain.output.domain_id }}
+        name: Official MarketPlace
+        repository_type: remote
+        endpoint: # fill in
+        version: v1
+        secret_id: ${{ tasks.market_token.output.secret_id }}
+      matches:
+        - domain_id
+        - name
+      mode: NO_UPDATE
+      verb:
+        create: register

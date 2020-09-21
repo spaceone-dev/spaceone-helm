@@ -8,5 +8,6 @@ editIndexYaml/
 .git
 .github
 .gitignore
+.DS_Store
 templates/.idea
 README.md
