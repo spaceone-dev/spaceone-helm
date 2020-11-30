@@ -20,7 +20,7 @@ Manage your infrastructure with SpaceONE. It doesn't matter what your infrastruc
 ### Commands
 
 ```
-$ helm repo add spaceone https://helm.stargate.spaceone.dev
+$ helm repo add spaceone https://helm.stargate.spaceone.dev/charts
 $ helm repo update
 $ helm install sp spaceone/spaceone -f values.yaml
 

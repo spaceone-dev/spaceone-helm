@@ -64,7 +64,7 @@ tasks:
       data:
         user_id: ${{ var.username }}
         domain_id: ${{ tasks.domain.output.domain_id }}
-        email: siyeon@pu22ppy.com
+        email: admin@example.com
       matches:
         - user_id
         - domain_id
