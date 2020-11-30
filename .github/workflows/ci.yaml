@@ -5,52 +5,20 @@ on:
       - "**"
   workflow_dispatch:
 
+env:
+  LOCATION_CHART_YAML: . # optional. for pypi upload
+  FORCE_UPLOAD: true # force upload when the version has already existed.
+  S3_BUCKET_NAME: helm.stargate.spaceone.dev-bucket
+  S3_BUCKET_SUBPATH_CHART: charts
+  S3_BUCKET_SUBPATH_MEDIA: media
+  DISTRIBUTE_ID: E1HBD4U9MS0NN8
+
 jobs:
-  initialize:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set environment virables
-        env:
-          LOCATION_CHART_YAML: . # optional. for pypi upload
-          FORCE_UPLOAD: true # force upload when the version has already existed.
-          S3_BUCKET_NAME: helm.stargate.spaceone.dev-bucket
-          S3_BUCKET_SUBPATH_CHART: charts
-          S3_BUCKET_SUBPATH_MEDIA: media
-
-        run: |
-          cat <<EOF>set_env.sh
-          echo "::set-env name=LOCATION_CHART_YAML::$LOCATION_CHART_YAML"
-          echo "::set-env name=FORCE_UPLOAD::$FORCE_UPLOAD"
-          echo "::set-env name=S3_BUCKET_NAME::$S3_BUCKET_NAME"
-          echo "::set-env name=S3_BUCKET_SUBPATH_CHART::$S3_BUCKET_SUBPATH_CHART"
-          echo "::set-env name=S3_BUCKET_SUBPATH_MEDIA::$S3_BUCKET_SUBPATH_MEDIA"
-          EOF
-
-          bash set_env.sh
-      - name: save envs
-        uses: actions/upload-artifact@v2
-        with:
-          name: set_env.sh
-          path: set_env.sh
-
-      - run: |
-          cat set_env.sh
-
   helm:
     if: github.repository_owner == 'spaceone-dev'
-    needs: initialize
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/download-artifact@v2
-        with:
-          name: set_env.sh
-
-      - name: Set environment variables
-        run: |
-          bash set_env.sh
-
       - name: Set up Helm3
         run: |
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
@@ -115,8 +83,6 @@ jobs:
           aws s3 cp --recursive media/ s3://${{ env.S3_BUCKET_NAME }}/${{ env.S3_BUCKET_SUBPATH_MEDIA }}/
 
       - name: Invalidate CloudFront Cache
-        env:
-          DISTRIBUTE_ID: E1HBD4U9MS0NN8
         run: |
           aws cloudfront create-invalidation --distribution-id ${{ env.DISTRIBUTE_ID }}  --paths "/*"
 

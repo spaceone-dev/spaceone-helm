@@ -6,18 +6,14 @@ on:
       - master
   workflow_dispatch:
 
+env:
+  LOCATION_CHART_YAML: . # optional. for pypi upload
+
 jobs:
   review:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-
-    - name: Set environment virables
-      env:
-        # LOCATION points the parent directory
-        LOCATION_CHART_YAML: . # optional. for pypi upload
-      run: |
-        echo "::set-env name=LOCATION_CHART_YAML::$LOCATION_CHART_YAML"
 
     - name: Set up Helm3
       run: |
