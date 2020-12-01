@@ -60,3 +60,95 @@ tasks:
         labels: [AWS]
         tags:
           description: AWS Access Key
+
+  - name: Create Google Cloud Schema
+    id: schema
+    uses: "@modules/resource"
+    spec:
+      resource_type: repository.Schema
+      data:
+        domain_id: ${{ tasks.domain.output.domain_id }}
+        #        repository_id: ${{ var.repository_id }}
+        name: google_oauth2_credentials
+        service_type: secret.credentials
+        schema:
+          type: object
+          properties:
+            type:
+              title: Type
+              type: string
+              minLength: 4
+              default: service_account
+            project_id:
+              title: Project ID
+              type: string
+              minLength: 4
+              examples:
+              - project-id
+            private_key_id:
+              title: Private Key ID
+              type: string
+              minLength: 4
+              examples:
+              - 771823abcd...
+            private_key:
+              title: Private Key
+              type: string
+              minLength: 4
+              examples:
+              - "-----BEGIN"
+            client_email:
+              title: Client Email
+              type: string
+              minLength: 4
+              exmaples:
+              - "<api-name>api@project-id.iam.gserviceaccount.com"
+            client_id:
+              title: Client ID
+              type: string
+              minLength: 4
+              examples:
+              - 10118252.....
+            auth_uri:
+              title: Auth URI
+              type: string
+              minLength: 4
+              default: https://acounts.google.com/o/oauth2/auth
+            token_uri:
+              title: Token URI
+              type: string
+              minLength: 4
+              default: https://oauth2.googleapis.com/token
+            auth_provider_x509_cert_url:
+              title: Auth Provider Cert URL
+              type: string
+              minLength: 4
+              default: https://www.googleapis.com/oauth2/v1/certs
+            client_x509_cert_url:
+              title: client_x509_cert_url
+              type: string
+              minLength: 4
+              examples:
+              - https://www.googleapis.com/...
+            zone:
+              title: Region
+              type: string
+              minLength: 4
+              examples:
+              - asia-northeast3
+          required:
+          - type
+          - project_id
+          - private_key_id
+          - private_key
+          - client_email
+          - client_id
+          - auth_uri
+          - token_uri
+          - auth_provider_x509_cert_url
+          - client_x509_cert_url
+        labels:
+        - Google Cloud
+        tags:
+          description: Google Cloud Credentials
+

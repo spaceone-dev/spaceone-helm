@@ -9,7 +9,7 @@ data:
     GLOBAL:
       MAX_WORKERS: 500
       NAME: root
-      HOSTNAME: {{ .Release.Namespace }}.svc.cluster.local
+      HOSTNAME: supervisor.{{ .Release.Namespace }}.svc.cluster.local
       BACKEND: KubernetesConnector
       LOG:
         loggers:
@@ -45,19 +45,27 @@ data:
           channel: supervisor_queue
 
       SCHEDULERS:
-        publish:
-          backend: spaceone.supervisor.scheduler.publish_scheduler.PublishScheduler
-          queue: default_q
-          interval: 30
         sync:
           backend: spaceone.supervisor.scheduler.sync_scheduler.SyncScheduler
           queue: default_q
-          interval: 120
+          interval: 20
 
       WORKERS:
         worker:
           backend: spaceone.core.scheduler.worker.BaseWorker
           queue: default_q
+          pool: 1
+
+      CACHES:
+        default:
+          backend: spaceone.core.cache.redis_cache.RedisCache
+          host: {{ .Values.redis.host }}
+          port: {{ .Values.redis.port }}
+          db: 0
+          encoding: utf-8
+          socket_timeout: 10
+          socket_connect_timeout: 10
+
       TOKEN_INFO:
 {{ tpl (toYaml .Values.supervisor.supervisor.token) . | indent 8 }}
   liveness-probe.sh: |

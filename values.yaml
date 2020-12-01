@@ -199,8 +199,8 @@ backend:
             protocol: TCP
 
       awsSecretManagerConnector:
-        awsAccessKeyId:
-        awsSecretAccessKey:
+        awsAccessKeyId: 
+        awsSecretAccessKey: 
         regionName: ap-northeast-2
 
     statistics:
@@ -286,11 +286,11 @@ frontend:
 
 supervisor:
   enabled: true
-  imagePullPolicy: IfNotPresent
+  imagePullPolicy: Always
   supervisor:
-    image: spaceone/supervisor:1.5.1
+    image: spaceone/supervisor:1.5.1.1
     replicas: 1
-    imagePullPolicy: IfNotPresent
+    imagePullPolicy: Always
     token: # yaml for TOKEN or TOKEN_INFO
       protocol: consul
       config:

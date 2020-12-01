@@ -58,12 +58,12 @@ data:
         }
     );
 
-    db = db.getSiblingDB('dev-marketplace')
+    db = db.getSiblingDB('dev-monitoring')
     db.createUser(
         {
             user: "{{ .Values.mongo.username }}",
             pwd: "{{ .Values.mongo.password }}",
-            roles: [ {role: "readWrite", db: "dev-marketplace" } ]
+            roles: [ {role: "readWrite", db: "dev-monitoring" } ]
         }
     );
 
