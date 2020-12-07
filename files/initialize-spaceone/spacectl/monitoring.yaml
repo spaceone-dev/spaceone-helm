@@ -8,7 +8,7 @@ tasks:
         domain_id: ${{ tasks.domain.output.domain_id }}
         name: AWS CloudWatch DataSource
         plugin_info:
-          plugin_id: ${{ tasks.aws_cloudwatch_plugin.output.plugin_id }}
+          plugin_id: ${{ tasks.aws_cloud_watch_plugin.output.plugin_id }}
           version: "1.0.2"
           options:
             supported_stat:
