@@ -75,3 +75,21 @@ data:
             roles: [ {role: "readWrite", db: "dev-statistics" } ]
         }
     );
+
+    db = db.getSiblingDB('dev-config')
+    db.createUser(
+        {
+            user: "{{ .Values.mongo.username }}",
+            pwd: "{{ .Values.mongo.password }}",
+            roles: [ {role: "readWrite", db: "dev-config" } ]
+        }
+    );
+
+    db = db.getSiblingDB('dev-power-scheduler')
+    db.createUser(
+        {
+            user: "{{ .Values.mongo.username }}",
+            pwd: "{{ .Values.mongo.password }}",
+            roles: [ {role: "readWrite", db: "dev-power-scheduler" } ]
+        }
+    );
