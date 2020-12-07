@@ -13,6 +13,9 @@ data:
           db: 'dev-config'
           host: {{ .Values.mongo.host }}
           port: {{ .Values.mongo.port }}
+          username: {{ .Values.mongo.username }}
+          password: {{ .Values.mongo.password }}
+          maxPoolSize: 200
       HANDLERS:
         authentication:
         - backend: spaceone.core.handler.authentication_handler.AuthenticationGRPCHandler

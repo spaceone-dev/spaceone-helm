@@ -43,6 +43,9 @@ data:
           repository: grpc://{{ .Values.backend.services.repository.endpoint }}/v1
           secret: grpc://{{ .Values.backend.services.secret.endpoint }}/v1
           monitoring: grpc://{{ .Values.backend.services.monitoring.endpoint }}/v1
+          config: grpc://{{ .Values.backend.services.config.endpoint }}/v1
+          power_scheduler: grpc://{{ .Values.backend.services.power_scheduler.endpoint }}/v1
+          cost_saving: grpc://{{ .Values.backend.services.cost_saving.endpoint }}/v1
       HANDLERS:
         authentication:
           - backend: spaceone.core.handler.authentication_handler.AuthenticationGRPCHandler
