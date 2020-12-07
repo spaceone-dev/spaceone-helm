@@ -6,23 +6,23 @@ tasks:
       resource_type: monitoring.DataSource
       data:
         domain_id: ${{ tasks.domain.output.domain_id }}
-        name: AWS CloudWatch DataSource
+        name: AWS CloudWatch
         plugin_info:
           plugin_id: ${{ tasks.aws_cloud_watch_plugin.output.plugin_id }}
           version: "1.0.2"
           options:
             supported_stat:
             - AVERAGE
-              MAX
-              MIN
+            - MAX
+            - MIN
             supported_resource_type:
             - inventory.Server
-              inventory.CloudService
+            - inventory.CloudService
             reference_keys:
             - resource_type: inventory.Server
-              resource_key: data.cloudwatch
+              reference_key: data.cloudwatch
             - resource_type: inventory.CloudService
-              resource_key: data.cloudwatch
+              reference_key: data.cloudwatch
           provider: aws
       mode: EXEC
       verb:
@@ -35,24 +35,24 @@ tasks:
       resource_type: monitoring.DataSource
       data:
         domain_id: ${{ tasks.domain.output.domain_id }}
-        name: Google Cloud StackDriver DataSource
+        name: Google Cloud StackDriver
         plugin_info:
           plugin_id: ${{ tasks.google_cloud_stackdriver_plugin.output.plugin_id }}
           version: "1.0.1"
           options:
             supported_stat:
             - MEAN
-              MAX
-              MIN
-              SUM
+            - MAX
+            - MIN
+            - SUM
             supported_resource_type:
             - inventory.Server
-              inventory.CloudService
+            - inventory.CloudService
             reference_keys:
             - resource_type: inventory.Server
-              resource_key: data.stackdriver
+              reference_key: data.stackdriver
             - resource_type: inventory.CloudService
-              resource_key: data.stackdriver
+              reference_key: data.stackdriver
           provider: google_cloud
       mode: EXEC
       verb:

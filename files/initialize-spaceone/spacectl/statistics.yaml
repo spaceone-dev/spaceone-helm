@@ -71,7 +71,7 @@ tasks:
     id: daily_cloud_service_by_project
     uses: "@modules/resource"
     spec:
-      resource_type: staticstics.Schedule
+      resource_type: statistics.Schedule
       data:
         domain_id: ${{ tasks.domain.output.domain_id }}
         topic: daily_cloud_service_summary_by_project

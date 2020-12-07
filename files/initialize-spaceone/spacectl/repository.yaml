@@ -172,6 +172,8 @@ tasks:
         provider: 'aws'
         capability:
           supported_schema: ['aws_access_key', 'aws_assume_role']
+          use_resource_secret: true
+          monitoring_type: METRIC
         tags:
           icon: https://assets-console-spaceone-stg.s3.ap-northeast-2.amazonaws.com/console-assets/icons/aws-cloudwatch.svg
           description: AWS Cloud Watch Monitoring Plugin
@@ -194,6 +196,8 @@ tasks:
         provider: 'aws'
         capability:
           supported_schema: ['aws_access_key', 'aws_assume_role']
+          use_resource_secret: true
+          monitoring_type: LOG
         tags:
           icon: https://assets-console-spaceone-stg.s3.ap-northeast-2.amazonaws.com/console-assets/icons/aws-phd.svg
           description: AWS Personal Health Dashboard Monitoring Plugin
@@ -258,11 +262,13 @@ tasks:
         domain_id: ${{ tasks.domain.output.domain_id }}
         name: google-cloud-stackdriver
         service_type: monitoring.DataSource
-        image: spaceone/cloud-stackdriver
+        image: spaceone/google-cloud-stackdriver
         labels: ['Monitoring', 'Google Cloud', 'Stackdriver', 'Operations Suite']
         provider: 'google_cloud'
         capability:
           supported_schema: ['google_oauth2_credentials']
+          use_resource_secret: true
+          monitoring_type: METRIC
         tags:
           icon: https://assets-console-spaceone-stg.s3.ap-northeast-2.amazonaws.com/console-assets/icons/google-cloud-stackdriver.svg
           description: Google Cloud Stackdriver Monitoring Plugin
