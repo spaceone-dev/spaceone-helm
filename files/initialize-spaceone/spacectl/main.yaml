@@ -3,8 +3,9 @@ import:
   - root_domain.yaml
   - repository.yaml
   - schema.yaml
+  - monitoring.yaml
+  - statistics.yaml
   - plugin_endpoint.yaml
-
 
 var:
   domain_name: root

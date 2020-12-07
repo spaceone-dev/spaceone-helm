@@ -1,0 +1,60 @@
+tasks:
+  - name: Add CloudWatch DataSource
+    id: cloudwatch_datasource
+    uses: "@modules/resource"
+    spec:
+      resource_type: monitoring.DataSource
+      data:
+        domain_id: ${{ tasks.domain.output.domain_id }}
+        name: AWS CloudWatch DataSource
+        plugin_info:
+          plugin_id: ${{ tasks.aws_cloudwatch_plugin.output.plugin_id }}
+          version: "1.0.2"
+          options:
+            supported_stat:
+            - AVERAGE
+              MAX
+              MIN
+            supported_resource_type:
+            - inventory.Server
+              inventory.CloudService
+            reference_keys:
+            - resource_type: inventory.Server
+              resource_key: data.cloudwatch
+            - resource_type: inventory.CloudService
+              resource_key: data.cloudwatch
+          provider: aws
+      mode: EXEC
+      verb:
+        exec: register
+
+- name: Add Google Stackdriver DataSource
+    id: stackdriver_datasource
+    uses: "@modules/resource"
+    spec:
+      resource_type: monitoring.DataSource
+      data:
+        domain_id: ${{ tasks.domain.output.domain_id }}
+        name: Google Cloud StackDriver DataSource
+        plugin_info:
+          plugin_id: ${{ tasks.google_cloud_stackdriver_plugin.output.plugin_id }}
+          version: "1.0.1"
+          options:
+            supported_stat:
+            - MEAN
+              MAX
+              MIN
+              SUM
+            supported_resource_type:
+            - inventory.Server
+              inventory.CloudService
+            reference_keys:
+            - resource_type: inventory.Server
+              resource_key: data.stackdriver
+            - resource_type: inventory.CloudService
+              resource_key: data.stackdriver
+          provider: google_cloud
+      mode: EXEC
+      verb:
+        exec: register
+
