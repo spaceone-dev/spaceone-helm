@@ -230,6 +230,34 @@ backend:
             targetPort: 50051
             protocol: TCP
 
+    power_scheduler:
+      enabled: false
+      image: spaceone/power_scheduler:1.5.1
+      endpoint: power_scheduler:50051
+      service:
+        type: ClusterIP
+        annotations:
+          nil: nil
+        ports:
+          - name: grpc
+            port: 50051
+            targetPort: 50051
+            protocol: TCP
+
+    cost_saving:
+      enabled: false
+      image: spaceone/cost_saving:1.5.1
+      endpoint: cost_saving:50051
+      service:
+        type: ClusterIP
+        annotations:
+          nil: nil
+        ports:
+          - name: grpc
+            port: 50051
+            targetPort: 50051
+            protocol: TCP
+
 
 frontend:
 #  domain: root # 안먹힘

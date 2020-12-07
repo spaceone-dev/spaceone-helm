@@ -50,6 +50,9 @@ data:
         PluginConnector:
           endpoint:
             v1: grpc://{{ .Values.backend.services.plugin.endpoint }}
+        ConfigConnector:
+          endpoint:
+            v1: grpc://{{ .Values.backend.services.config.endpoint }}
       HANDLERS:
         authentication:
         - backend: spaceone.core.handler.authentication_handler.AuthenticationGRPCHandler
