@@ -19,7 +19,9 @@ To register public marketplace, update like
 File: files/initialize-spaceone/spacectl/main.yaml
 
 * comment register_plugins.yaml
+* comment schema.yaml
 * uncomment marketplace.yaml
+* uncomment developer.yaml
 * update marketplace_token
 
 To get marketplace token email to support@spaceone.dev
@@ -31,7 +33,8 @@ import:
   - repository.yaml
 #  - register_plugins.yaml
   - marketplace.yaml
-  - schema.yaml
+  - developer.yaml
+#  - schema.yaml
   - monitoring.yaml
   - statistics.yaml
   - plugin_endpoint.yaml
