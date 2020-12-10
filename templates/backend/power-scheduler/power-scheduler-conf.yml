@@ -1,0 +1,60 @@
+{{- if .Values.backend.enabled }}
+  {{- if .Values.backend.services.power-scheduler.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: power-scheduler-conf
+  namespace: {{ .Release.Namespace }}
+data:
+  power-scheduler.yml: |
+    GLOBAL:
+      DATABASES:
+        default:
+          db: 'dev-power-scheduler'
+          host: {{ .Values.mongo.host }}
+          port: {{ .Values.mongo.port }}
+          username: {{ .Values.mongo.username }}
+          password: {{ .Values.mongo.password }}
+          maxPoolSize: 200
+      CACHES:
+        default:
+          backend: spaceone.core.cache.redis_cache.RedisCache
+          host: {{ .Values.redis.host }}
+          port: {{ .Values.redis.port }}
+          db: 5
+          encoding: utf-8
+          socket_timeout: 10
+          socket_connect_timeout: 10
+      LOG:
+        loggers:
+          spaceone:
+            handlers:
+              - console
+              - file
+        handlers:
+          file:
+            type: file
+            filename: /logs/power-scheduler.log
+      CONNECTORS:
+        InventoryConnector:
+          endpoint:
+            v1: grpc://inventory:50051
+        PluginConnector:
+          endpoint:
+            v1: grpc://plugin:50051
+        RepositoryConnector:
+          endpoint:
+            v1: grpc://repository:50051
+        SecretConnector:
+          endpoint:
+            v1: grpc://secret:50051
+
+      HANDLERS:
+        authentication:
+          - backend: spaceone.core.handler.authentication_handler.AuthenticationGRPCHandler
+            uri: grpc://{{ .Values.backend.services.identity.endpoint }}/v1/Domain/get_public_key
+        authorization:
+          - backend: spaceone.core.handler.authorization_handler.AuthorizationGRPCHandler
+            uri: grpc://{{ .Values.backend.services.identity.endpoint }}/v1/Authorization/verify
+  {{- end }}
+{{- end }}
