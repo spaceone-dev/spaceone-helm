@@ -1,0 +1,48 @@
+#####################################
+# For developer only
+# Power Controller
+#####################################
+  - name: Create AWS Power Controller Plugin
+    id: aws_power_controller
+    uses: "@modules/resource"
+    spec:
+      resource_type: repository.Plugin
+      data:
+        domain_id: ${{ tasks.domain.output.domain_id }}
+        name: aws-power-controller
+        service_type: power_scheduler.Controller
+        image: spaceone/aws-power-controller
+        labels: ['Server', 'RDS', 'Auto Scaling Group', 'Power Scheduler']
+        provider: 'aws'
+        capability:
+          supported_schema: ['aws_access_key', 'aws_assume_role']
+        tags:
+          icon: https://assets-console-spaceone-stg.s3.ap-northeast-2.amazonaws.com/console-assets/icons/aws-ec2.svg
+          description: AWS Power Controller
+          spaceone:plugin_name: aws-power-controller
+      mode: EXEC
+      verb:
+        exec: register
+
+  - name: Create Google Cloud Power Controller Plugin
+    id: google_cloud_power_controller
+    uses: "@modules/resource"
+    spec:
+      resource_type: repository.Plugin
+      data:
+        domain_id: ${{ tasks.domain.output.domain_id }}
+        name: google-cloud-power-controller
+        service_type: power_scheduler.Controller
+        image: spaceone/google-cloud-power-controller
+        labels: ['Server', 'Instance Group', 'Power Scheduler']
+        provider: 'google_cloud'
+        capability:
+          supported_schema: ['google_oauth2_credentials']
+        tags:
+          icon: https://assets-console-spaceone-stg.s3.ap-northeast-2.amazonaws.com/console-assets/icons/google-icon.svg
+          description: Google Cloud Power Controller
+          spaceone:plugin_name: google-cloud-power-controller
+      mode: EXEC
+      verb:
+        exec: register
+
