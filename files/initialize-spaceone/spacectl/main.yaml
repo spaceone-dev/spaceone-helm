@@ -2,6 +2,7 @@ import:
   - mongo.yaml
   - root_domain.yaml
   - repository.yaml
+  - marketplace.yaml
   - schema.yaml
   - monitoring.yaml
   - statistics.yaml

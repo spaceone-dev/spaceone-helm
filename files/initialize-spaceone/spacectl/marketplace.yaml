@@ -1,0 +1,38 @@
+tasks:
+  - name: Create Marketplace Token
+    id: marketplace_token
+    uses: "@modules/resource"
+    spec:
+      resource_type: secret.Secret
+      date:
+        domain_id: ${{ tasks.domain.output.domain_id }}
+        name: marketplace-token
+        secret_type: CREDENTIALS
+        data: 
+          token: {{ .Values.marketplace.token }}
+      matches:
+        - domain_id
+        - name
+      mode: NO_UPDATE
+      verb:
+        create: create
+
+  - name: Register Official Marketplace
+    id: marketplace
+    uses: "@modules/resource"
+    spec:
+      resource_type: repository.Repository
+      data:
+        domain_id: ${{ tasks.domain.output.domain_id }}
+        name: Official Marketplace 
+        repository_type: remote
+        endpoint: grpc://repository.portal.spaceone.dev:50051
+        version: v1
+        secret_id: ${{ tasks.marketplace_token.output.secret_id }}
+      matches:
+        - domain_id
+        - name
+      mode: NO_UPDATE
+      verb:
+        create: register
+
