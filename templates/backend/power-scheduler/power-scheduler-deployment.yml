@@ -1,0 +1,71 @@
+{{- if .Values.backend.enabled }}
+  {{- if .Values.backend.services.power-scheduler.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+{{ include "spaceone.labels" . | indent 4 }}
+    helm.stargate.spaceone.dev/service: power-scheduler
+  name: power-scheduler
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      helm.stargate.spaceone.dev/service: power-scheduler
+  template:
+    metadata:
+      annotations:
+        spaceone.auto-deploy-flag: {{ include (print $.Template.BasePath "/backend/power-scheduler/power-scheduler-conf.yml") . | sha256sum }}
+      labels:
+{{ include "spaceone.labels" . | indent 8 }}
+        helm.stargate.spaceone.dev/service: power-scheduler
+    spec:
+      terminationGracePeriodSeconds: {{ .Values.gracePeriod }}
+      containers:
+        - name: power-scheduler
+          image: {{ .Values.backend.services.power-scheduler.image }}
+          imagePullPolicy: {{ .Values.backend.imagePullPolicy }}
+          ports:
+            - containerPort: 50051
+          volumeMounts:
+            - name: power-scheduler-conf
+              mountPath: /opt/spaceone/power-scheduler/config/power-scheduler.yml
+              subPath: power-scheduler.yml
+              readOnly: true
+            - name: log-volume
+              mountPath: /logs
+          livenessProbe:
+            exec:
+              command:
+                - /bin/grpc_health_probe
+                - -addr=127.0.0.1:50051
+                - -service=power-scheduler
+            initialDelaySeconds: 5
+            failureThreshold: 3
+            periodSeconds: 2
+            successThreshold: 1
+            timeoutSeconds: 1
+#          readinessProbe:
+#            exec:
+#              command:
+#                - /bin/grpc_health_probe
+#                - -addr=127.0.0.1:50051
+#                - -service=power-scheduler
+#            initialDelaySeconds: 5
+#            failureThreshold: 3
+#            periodSeconds: 5
+#            successThreshold: 2
+#            timeoutSeconds: 1
+          env:
+            - name: SPACEONE_CONFIG_FILE
+              value: /opt/spaceone/power-scheduler/config/power-scheduler.yml
+      volumes:
+        - name: power-scheduler-conf
+          configMap:
+            name: power-scheduler-conf
+        - name: log-volume
+          emptyDir: {}
+  {{- end }}
+{{- end }}
