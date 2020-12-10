@@ -2,7 +2,8 @@ import:
   - mongo.yaml
   - root_domain.yaml
   - repository.yaml
-  - marketplace.yaml
+  - register_plugins.yaml
+#  - marketplace.yaml
   - schema.yaml
   - monitoring.yaml
   - statistics.yaml
@@ -12,6 +13,7 @@ var:
   domain_name: root
   domain_owner: admin
   username: admin
+  marketplace_token: contact_to_support@spaceone.dev 
   mongo_init_path: init_db.js
 
 tasks: []

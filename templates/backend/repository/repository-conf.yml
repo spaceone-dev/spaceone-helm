@@ -47,6 +47,13 @@ data:
               Repository.update:
                 - credentials
       CONNECTORS:
+        {{- if .Values.backend.services.repository.ECR.enabled }}
+        RegistryConnector:
+          host: {{ .Values.backend.services.repository.ECR.host }}
+          verify_ssl: False
+          api_version: 2
+          username: AWS
+        {{- end }}
         IdentityConnector:
           endpoint:
             v1: grpc://{{ .Values.backend.services.identity.endpoint }}

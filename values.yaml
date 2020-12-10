@@ -183,6 +183,9 @@ backend:
             port: 50051
             targetPort: 50051
             protocol: TCP
+      ECR:
+        enabled: false
+        host: https://<your ECR url>>
 
     secret:
       enabled: true
@@ -330,10 +333,6 @@ supervisor:
 
   kubectlProxy:
     image: spaceone/kubectl-proxy
-
-marketplace:
-  enabled: false
-  token: 
 
 ingress:
   enabled: false

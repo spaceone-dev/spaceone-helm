@@ -4,20 +4,17 @@ tasks:
     uses: "@modules/resource"
     spec:
       resource_type: secret.Secret
-      date:
+      data:
         domain_id: ${{ tasks.domain.output.domain_id }}
         name: marketplace-token
         secret_type: CREDENTIALS
         data: 
-          token: {{ .Values.marketplace.token }}
-      matches:
-        - domain_id
-        - name
-      mode: NO_UPDATE
+          token: ${{ var.marketplace_token }}
+      mode: EXEC
       verb:
-        create: create
+        exec: create
 
-  - name: Register Official Marketplace
+  - name: Create Marketplace Repository
     id: marketplace
     uses: "@modules/resource"
     spec:
@@ -29,10 +26,8 @@ tasks:
         endpoint: grpc://repository.portal.spaceone.dev:50051
         version: v1
         secret_id: ${{ tasks.marketplace_token.output.secret_id }}
-      matches:
-        - domain_id
-        - name
-      mode: NO_UPDATE
+      mode: EXEC
       verb:
-        create: register
+        exec: register
+
 
