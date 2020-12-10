@@ -20,8 +20,10 @@ File: files/initialize-spaceone/spacectl/main.yaml
 
 * comment register_plugins.yaml
 * comment schema.yaml
+* comment monitoring.yaml
 * uncomment marketplace.yaml
 * uncomment developer.yaml
+* uncomment monitoring_from_marketplace.yaml
 * update marketplace_token
 
 To get marketplace token email to support@spaceone.dev
@@ -35,7 +37,8 @@ import:
   - marketplace.yaml
   - developer.yaml
 #  - schema.yaml
-  - monitoring.yaml
+#  - monitoring.yaml
+  - monitoring_from_marketplace.yaml
   - statistics.yaml
   - plugin_endpoint.yaml
 
