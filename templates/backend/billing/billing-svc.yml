@@ -1,25 +1,25 @@
 {{- if .Values.backend.enabled }}
-  {{- if .Values.backend.services.power_scheduler.enabled }}
+  {{- if .Values.backend.services.billing.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    {{- range $key, $value := .Values.backend.services.power_scheduler.service.annotations }}
+    {{- range $key, $value := .Values.backend.services.billing.service.annotations }}
       {{- if not (eq $key "nil") }}
     {{ $key }}: {{ $value }}
       {{- end }}
     {{- end }}
   labels:
 {{ include "spaceone.labels" . | indent 4 }}
-    helm.stargate.spaceone.dev/service: power-scheduler
-  name: power-scheduler
+    helm.stargate.spaceone.dev/service: billing
+  name: billing
   namespace: {{ .Release.Namespace }}
 spec:
-    {{- with .Values.backend.services.power_scheduler }}
+    {{- with .Values.backend.services.billing }}
   ports:
 {{ toYaml .service.ports | indent 4 }}
   selector:
-    helm.stargate.spaceone.dev/service: power-scheduler
+    helm.stargate.spaceone.dev/service: billing
   sessionAffinity: None
   type: {{ .service.type }}
     {{- end }}

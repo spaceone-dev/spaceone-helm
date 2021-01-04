@@ -17,8 +17,8 @@ tasks:
       resource_type: identity.DomainOwner
       data:
         name: Domain Admin
-        owner_id: ${{ var.domain_owner }}
-        password: ${{ var.domain_owner }}
+        owner_id: ${{ var.domain_owner.id }}
+        password: ${{ var.domain_owner.password }}
         domain_id: ${{ tasks.domain.output.domain_id }}
       matches:
         - domain_id
@@ -33,9 +33,9 @@ tasks:
     spec:
       resource_type: identity.Token
       data:
+        user_id: ${{ tasks.domain_owner.spec.data.owner_id }}
+        user_type: DOMAIN_OWNER
         credentials:
-          user_type: DOMAIN_OWNER
-          user_id: ${{ tasks.domain_owner.spec.data.owner_id }}
           password: ${{ tasks.domain_owner.spec.data.password }}
         domain_id: ${{ tasks.domain.output.domain_id }}
       mode: EXEC
@@ -62,12 +62,13 @@ tasks:
     spec:
       resource_type: identity.User
       data:
-        user_id: ${{ var.username }}
+        user_id: ${{ var.user.id }}
+        user_type: API_USER
+        backend: LOCAL
         domain_id: ${{ tasks.domain.output.domain_id }}
-        email: admin@example.com
-      matches:
-        - user_id
-        - domain_id
+      mode: EXEC
+      verb:
+        exec: create
 
   - name: Create admin user API(Domain) key
     id: admin_user_api_key
@@ -77,10 +78,12 @@ tasks:
       data:
         user_id: ${{ tasks.admin_user.output.user_id }}
         domain_id: ${{ tasks.domain.output.domain_id }}
-        api_key_type: DOMAIN
-      matches:
-        - user_id
-        - domain_id
       mode: EXEC
       verb:
         exec: create
+
+  - name: Consul Supervisor API Key
+    uses: "@modules/shell"
+    spec:
+      run: |
+        curl -X PUT http://consul/v1/kv/debug/supervisor/TOKEN -d '${{ tasks.admin_user_api_key.output.api_key }}'

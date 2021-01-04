@@ -248,37 +248,38 @@ $ helm install sp spaceone/spaceone -n default -f values.yaml
 This will be appended soon.
 
 ## Release History
-
+* 1.5.3
+  * Add new billing service
+  * [Release Notes](https://github.com/spaceone-dev/spaceone/blob/master/release_notes/version_1.5.3_ko.md)
 * 1.2.2
   * Replace initialize codes using `spaceone-tester` with codes using `spacectl`
   * Remove `templates/tester-conf.yml`
-
-- 1.2.1
-  - reflect change of `supervisor-conf`
-  - specify the version of docker images from `latest`
-- 1.1.4
-  - no need to set console hostname as `root`.
-  - Trigger `initialize-spaceone` automatically
-    - waits for microservices are ready and then execute the initalizing job.
-    - introduced multiple inventory worker
-  - ingress and nlb is supported. ( for `console`, `console-api`)
-  - Changed names of objects 
-    - `wconsole-client` => `console`
-    - `wconsole-server`=>`console-api`
-    - `initialize-conf`=>`initialize-spaceone-conf`, `tester-conf`, `spacectl-conf`
-  - a specified tag for image (only `console`)
-- 0.1.4
-  - Support extraSpec to `Service` (e.g. .spec.loadBalancerSourceRanges)
-    - only available in `Frontend`
-  - Update some pod commands
+* 1.2.1
+  * reflect change of `supervisor-conf`
+  * specify the version of docker images from `latest`
+* 1.1.4
+  * no need to set console hostname as `root`.
+  * Trigger `initialize-spaceone` automatically
+    * waits for microservices are ready and then execute the initalizing job.
+    * introduced multiple inventory worker
+  * ingress and nlb is supported. ( for `console`, `console-api`)
+  * Changed names of objects 
+    * `wconsole-client` => `console`
+    * `wconsole-server`=>`console-api`
+    * `initialize-conf`=>`initialize-spaceone-conf`, `tester-conf`, `spacectl-conf`
+  * a specified tag for image (only `console`)
+* 0.1.4
+  * Support extraSpec to `Service` (e.g. .spec.loadBalancerSourceRanges)
+    * only available in `Frontend`
+  * Update some pod commands
     - e.g. `spaceone scheduler statistics`=>`spaceone scheduler spaceone.statistics`
-- 0.1.3
-  - You can set frontend hosts and endpoints.
-  - Serve local repository.
-  - Helm refactoring - applied unified indents
-  - Service annotations and types are available - ClusterIP, NodePort and LoadBalancer.
-- 0.1.0
-  - Initial version.
+* 0.1.3
+  * You can set frontend hosts and endpoints.
+  * Serve local repository.
+  * Helm refactoring - applied unified indents
+  * Service annotations and types are available - ClusterIP, NodePort and LoadBalancer.
+* 0.1.0
+  * Initial version.
 
 ## Maintainers
 

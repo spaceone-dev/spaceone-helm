@@ -1,38 +1,38 @@
 {{- if .Values.backend.enabled }}
-  {{- if .Values.backend.services.power_scheduler.enabled }}
+  {{- if .Values.backend.services.billing.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
 {{ include "spaceone.labels" . | indent 4 }}
-    helm.stargate.spaceone.dev/service: power-scheduler
-  name: power-scheduler
+    helm.stargate.spaceone.dev/service: billing
+  name: billing
   namespace: {{ .Release.Namespace }}
 spec:
   replicas: 1
   revisionHistoryLimit: 3
   selector:
     matchLabels:
-      helm.stargate.spaceone.dev/service: power-scheduler
+      helm.stargate.spaceone.dev/service: billing
   template:
     metadata:
       annotations:
-        spaceone.auto-deploy-flag: {{ include (print $.Template.BasePath "/backend/power-scheduler/power-scheduler-conf.yml") . | sha256sum }}
+        spaceone.auto-deploy-flag: {{ include (print $.Template.BasePath "/backend/billing/billing-conf.yml") . | sha256sum }}
       labels:
 {{ include "spaceone.labels" . | indent 8 }}
-        helm.stargate.spaceone.dev/service: power-scheduler
+        helm.stargate.spaceone.dev/service: billing
     spec:
       terminationGracePeriodSeconds: {{ .Values.gracePeriod }}
       containers:
-        - name: power-scheduler
-          image: {{ .Values.backend.services.power_scheduler.image }}
+        - name: billing
+          image: {{ .Values.backend.services.billing.image }}
           imagePullPolicy: {{ .Values.backend.imagePullPolicy }}
           ports:
             - containerPort: 50051
           volumeMounts:
-            - name: power-scheduler-conf
-              mountPath: /opt/spaceone/power-scheduler/config/power-scheduler.yml
-              subPath: power-scheduler.yml
+            - name: billing-conf
+              mountPath: /opt/spaceone/billing/config/billing.yml
+              subPath: billing.yml
               readOnly: true
             - name: log-volume
               mountPath: /logs
@@ -41,7 +41,7 @@ spec:
               command:
                 - /bin/grpc_health_probe
                 - -addr=127.0.0.1:50051
-                - -service=power-scheduler
+                - -service=billing
             initialDelaySeconds: 5
             failureThreshold: 3
             periodSeconds: 2
@@ -52,7 +52,7 @@ spec:
 #              command:
 #                - /bin/grpc_health_probe
 #                - -addr=127.0.0.1:50051
-#                - -service=power-scheduler
+#                - -service=billing
 #            initialDelaySeconds: 5
 #            failureThreshold: 3
 #            periodSeconds: 5
@@ -60,11 +60,11 @@ spec:
 #            timeoutSeconds: 1
           env:
             - name: SPACEONE_CONFIG_FILE
-              value: /opt/spaceone/power-scheduler/config/power-scheduler.yml
+              value: /opt/spaceone/billing/config/billing.yml
       volumes:
-        - name: power-scheduler-conf
+        - name: billing-conf
           configMap:
-            name: power-scheduler-conf
+            name: billing-conf
         - name: log-volume
           emptyDir: {}
   {{- end }}

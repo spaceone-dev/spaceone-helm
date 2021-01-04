@@ -22,12 +22,12 @@ data:
         }
     );
 
-    db = db.getSiblingDB('dev-inventory')
+    db = db.getSiblingDB('dev-secret')
     db.createUser(
         {
             user: "{{ .Values.mongo.username }}",
             pwd: "{{ .Values.mongo.password }}",
-            roles: [ {role: "readWrite", db: "dev-inventory" } ]
+            roles: [ {role: "readWrite", db: "dev-secret" } ]
         }
     );
 
@@ -49,12 +49,21 @@ data:
         }
     );
 
-    db = db.getSiblingDB('dev-secret')
+    db = db.getSiblingDB('dev-config')
     db.createUser(
         {
             user: "{{ .Values.mongo.username }}",
             pwd: "{{ .Values.mongo.password }}",
-            roles: [ {role: "readWrite", db: "dev-secret" } ]
+            roles: [ {role: "readWrite", db: "dev-config" } ]
+        }
+    );
+
+    db = db.getSiblingDB('dev-inventory')
+    db.createUser(
+        {
+            user: "{{ .Values.mongo.username }}",
+            pwd: "{{ .Values.mongo.password }}",
+            roles: [ {role: "readWrite", db: "dev-inventory" } ]
         }
     );
 
@@ -76,12 +85,21 @@ data:
         }
     );
 
-    db = db.getSiblingDB('dev-config')
+    db = db.getSiblingDB('dev-report')
     db.createUser(
         {
             user: "{{ .Values.mongo.username }}",
             pwd: "{{ .Values.mongo.password }}",
-            roles: [ {role: "readWrite", db: "dev-config" } ]
+            roles: [ {role: "readWrite", db: "dev-report" } ]
+        }
+    );
+
+    db = db.getSiblingDB('dev-billing')
+    db.createUser(
+        {
+            user: "{{ .Values.mongo.username }}",
+            pwd: "{{ .Values.mongo.password }}",
+            roles: [ {role: "readWrite", db: "dev-billing" } ]
         }
     );
 
@@ -91,5 +109,14 @@ data:
             user: "{{ .Values.mongo.username }}",
             pwd: "{{ .Values.mongo.password }}",
             roles: [ {role: "readWrite", db: "dev-power-scheduler" } ]
+        }
+    );
+
+    db = db.getSiblingDB('dev-cost-saving')
+    db.createUser(
+        {
+            user: "{{ .Values.mongo.username }}",
+            pwd: "{{ .Values.mongo.password }}",
+            roles: [ {role: "readWrite", db: "dev-cost-saving" } ]
         }
     );

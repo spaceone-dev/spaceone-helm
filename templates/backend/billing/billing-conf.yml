@@ -1,32 +1,27 @@
 {{- if .Values.backend.enabled }}
-  {{- if .Values.backend.services.inventory.enabled }}
+  {{- if .Values.backend.services.billing.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: inventory-conf
+  name: billing-conf
   namespace: {{ .Release.Namespace }}
 data:
-  inventory.yml: |
+  billing.yml: |
     GLOBAL:
-      MAX_WORKERS: 1000
       DATABASES:
         default:
-          db: 'dev-inventory'
+          db: 'dev-billing'
           host: {{ .Values.mongo.host }}
           port: {{ .Values.mongo.port }}
           maxPoolSize: 200
           username: {{ .Values.mongo.username }}
           password: {{ .Values.mongo.password }}
-      ENDPOINT:
-        inventory:
-          endpoint: "localhost:50051"
-          version: v1
       CACHES:
         default:
           backend: spaceone.core.cache.redis_cache.RedisCache
           host: {{ .Values.redis.host }}
           port: {{ .Values.redis.port }}
-          db: 1
+          db: 5
           encoding: utf-8
           socket_timeout: 10
           socket_connect_timeout: 10
@@ -39,37 +34,29 @@ data:
         handlers:
           file:
             type: file
-            filename: /logs/inventory.log
+            filename: /logs/billing.log
       CONNECTORS:
         IdentityConnector:
           endpoint:
             v1: grpc://{{ .Values.backend.services.identity.endpoint }}
-        SecretConnector:
+        InventoryConnector:
           endpoint:
-            v1: grpc://{{ .Values.backend.services.secret.endpoint }}
+            v1: grpc://{{ .Values.backend.services.inventory.endpoint }}
         PluginConnector:
           endpoint:
             v1: grpc://{{ .Values.backend.services.plugin.endpoint }}
         RepositoryConnector:
           endpoint:
             v1: grpc://{{ .Values.backend.services.repository.endpoint }}
+        SecretConnector:
+          endpoint:
+            v1: grpc://{{ .Values.backend.services.secret.endpoint }}
       HANDLERS:
         authentication:
-        - backend: spaceone.core.handler.authentication_handler.AuthenticationGRPCHandler
-          uri: grpc://{{ .Values.backend.services.identity.endpoint }}/v1/Domain/get_public_key
-          #        authorization:
-          #        - backend: spaceone.core.handler.authorization_handler.AuthorizationGRPCHandler
-          #          uri: grpc://{{ .Values.backend.services.identity.endpoint }}/v1/Authorization/verify
-      QUEUES:
-          collector_q:
-            backend: spaceone.core.queue.redis_queue.RedisQueue
-            host: {{ .Values.redis.host }}
-            port: {{ .Values.redis.port }}
-            channel: collector
-
-      TOKEN_INFO:
-{{ tpl (toYaml .Values.supervisor.supervisor.token) . | indent 8 }}
-
-      collect_queue: collector_q
+          - backend: spaceone.core.handler.authentication_handler.AuthenticationGRPCHandler
+            uri: grpc://{{ .Values.backend.services.identity.endpoint }}/v1/Domain/get_public_key
+            #        authorization:
+            #          - backend: spaceone.core.handler.authorization_handler.AuthorizationGRPCHandler
+            #            uri: grpc://{{ .Values.backend.services.identity.endpoint }}/v1/Authorization/verify
   {{- end }}
 {{- end }}

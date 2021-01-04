@@ -15,24 +15,3 @@ tasks:
       verb:
         create: register
 
-  - name: Create a Supervisor API Key
-    id: supervisor_api_key
-    uses: "@modules/resource"
-    spec:
-      resource_type: identity.APIKey
-      data:
-        domain_id: ${{ tasks.domain.output.domain_id }}
-        user_id: ${{ var.username }}
-        api_key_type: USER
-      matches:
-        - domain_id
-      mode: EXEC
-      verb:
-        exec: create
-
-  - name: Consul Supervisor API Key
-    uses: "@modules/shell"
-    spec:
-      run: |
-        curl -X PUT http://consul/v1/kv/debug/supervisor/TOKEN -d '${{ tasks.supervisor_api_key.output.api_key }}'
-

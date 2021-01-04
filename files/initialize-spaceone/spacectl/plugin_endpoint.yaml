@@ -6,7 +6,7 @@ tasks:
       resource_type: plugin.Plugin
       data:
         domain_id: ${{ tasks.domain.output.domain_id }}
-        version: "1.4"
+        version: "1.7"
         plugin_id: ${{ tasks.aws_ec2_plugin.output.plugin_id }}
         labels: {}
       mode: EXEC
@@ -19,7 +19,7 @@ tasks:
       resource_type: plugin.Plugin
       data:
         domain_id: ${{ tasks.domain.output.domain_id }}
-        version: "1.2"
+        version: "1.5"
         plugin_id: ${{ tasks.aws_cloud_service_plugin.output.plugin_id }}
         labels: {}
       mode: EXEC

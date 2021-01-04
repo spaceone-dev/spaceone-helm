@@ -1,5 +1,5 @@
 {{- if .Values.backend.enabled }}
-  {{- if .Values.backend.services.power-scheduler.enabled }}
+  {{- if .Values.backend.services.power_scheduler.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -53,8 +53,8 @@ data:
         authentication:
           - backend: spaceone.core.handler.authentication_handler.AuthenticationGRPCHandler
             uri: grpc://{{ .Values.backend.services.identity.endpoint }}/v1/Domain/get_public_key
-        authorization:
-          - backend: spaceone.core.handler.authorization_handler.AuthorizationGRPCHandler
-            uri: grpc://{{ .Values.backend.services.identity.endpoint }}/v1/Authorization/verify
+            #        authorization:
+            #          - backend: spaceone.core.handler.authorization_handler.AuthorizationGRPCHandler
+            #            uri: grpc://{{ .Values.backend.services.identity.endpoint }}/v1/Authorization/verify
   {{- end }}
 {{- end }}
