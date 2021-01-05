@@ -1,0 +1,52 @@
+{{- if .Values.backend.enabled }}
+  {{- if .Values.backend.services.statisticsScheduler.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+{{ include "spaceone.labels" . | indent 4 }}
+    helm.stargate.spaceone.dev/service: statistics-worker
+    helm.stargate.spaceone.dev/need_initialization: "true"
+  name: statistics-worker
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      helm.stargate.spaceone.dev/service: statistics-worker
+  template:
+    metadata:
+      annotations:
+        spaceone.auto-deploy-flag: {{ include (print $.Template.BasePath "/backend/statistics-worker/statistics-worker-conf.yml") . | sha256sum }}
+      labels:
+{{ include "spaceone.labels" . | indent 8 }}
+        helm.stargate.spaceone.dev/service: statistics-worker
+        helm.stargate.spaceone.dev/need_initialization: "true"
+    spec:
+      terminationGracePeriodSeconds: {{ .Values.gracePeriod }}
+      containers:
+        - name: statistics
+          image: {{ .Values.backend.services.statisticsScheduler.image }}
+          command: ['spaceone', 'scheduler', 'spaceone.statistics']
+          imagePullPolicy: {{ .Values.backend.imagePullPolicy }}
+          ports:
+            - containerPort: 50051
+          volumeMounts:
+            - name: statistics-worker-conf
+              mountPath: /opt/spaceone/statistics/config/statistics.yml
+              subPath: statistics.yml
+              readOnly: true
+            - name: log-volume
+              mountPath: /logs
+          env:
+            - name: SPACEONE_CONFIG_FILE
+              value: /opt/spaceone/statistics/config/statistics.yml
+      volumes:
+        - name: statistics-worker-conf
+          configMap:
+            name: statistics-worker-conf
+        - name: log-volume
+          emptyDir: {}
+  {{- end }}
+{{- end }}
