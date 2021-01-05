@@ -28,7 +28,7 @@ spec:
       containers:
         - name: statistics
           image: {{ .Values.backend.services.statisticsScheduler.image }}
-          command: ['spaceone', 'scheduler', 'spaceone.statistics']
+          command: ['spaceone', 'celery', 'spaceone.statistics']
           imagePullPolicy: {{ .Values.backend.imagePullPolicy }}
           ports:
             - containerPort: 50051

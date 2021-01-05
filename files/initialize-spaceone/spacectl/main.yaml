@@ -6,8 +6,8 @@ import:
   - marketplace.yaml
     #  - schema.yaml
     #  - monitoring.yaml
-  - monitoring_from_marketplace.yaml
   - statistics.yaml
+  - monitoring_from_marketplace.yaml
     #- plugin_endpoint.yaml
 
 var:

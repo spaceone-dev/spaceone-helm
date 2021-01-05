@@ -9,7 +9,7 @@ tasks:
         name: AWS CloudWatch
         plugin_info:
           plugin_id: plugin-41782f6158bb
-          version: "1.0.2"
+          version: "1.1"
           options:
             supported_stat:
             - AVERAGE
@@ -38,7 +38,7 @@ tasks:
         name: Google Cloud StackDriver
         plugin_info:
           plugin_id: plugin-57773973639a
-          version: "1.0.1"
+          version: "1.0.2"
           options:
             supported_stat:
             - MEAN
