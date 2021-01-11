@@ -223,15 +223,6 @@ backend:
     statisticsScheduler:
       enabled: true
       image: spaceone/statistics:1.5.3
-      service:
-        type: ClusterIP
-        annotations:
-          nil: nil
-        ports:
-          - name: grpc
-            port: 50051
-            targetPort: 50051
-            protocol: TCP
 
     billing:
       enabled: true
@@ -284,7 +275,7 @@ frontend:
   console:
     enabled: true
     image: spaceone/console
-    tag: 1.5.3
+    tag: 1.5.3.2
     host: console
     service:
       type: ClusterIP
@@ -310,7 +301,7 @@ frontend:
     enabled: true
     endpoint: console-api
     protocol: http # https
-    image: spaceone/console-api:1.5.3.1
+    image: spaceone/console-api:1.5.3.2
     service:
       type: ClusterIP
       annotations:
