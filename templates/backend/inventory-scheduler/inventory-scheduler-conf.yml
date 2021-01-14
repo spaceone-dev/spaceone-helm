@@ -71,6 +71,12 @@ data:
           queue: collector_q
           interval: 1
           minute: ':01'
+
+        interval_scheduler:
+          backend: spaceone.inventory.scheduler.interval_scheduler.InventoryIntervalScheduler
+          queue: collector_q
+          interval: 60
+
         cleanup_scheduler:
           backend: spaceone.inventory.scheduler.cleanup_scheduler.CleanupScheduler
           queue: collector_q
