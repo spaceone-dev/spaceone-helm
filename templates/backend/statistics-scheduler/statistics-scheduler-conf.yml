@@ -31,6 +31,10 @@ data:
             handlers:
               - console
               - file
+          celery:
+            handlers:
+              - console
+              - file
         handlers:
           file:
             type: file
@@ -54,23 +58,22 @@ data:
         authentication:
           - backend: spaceone.core.handler.authentication_handler.AuthenticationGRPCHandler
             uri: grpc://{{ .Values.backend.services.identity.endpoint }}/v1/Domain/get_public_key
-        authorization:
-          - backend: spaceone.core.handler.authorization_handler.AuthorizationGRPCHandler
-            uri: grpc://{{ .Values.backend.services.identity.endpoint }}/v1/Authorization/verify
+            #authorization:
+            #- authbackend: spaceone.core.handler.authorization_handler.AuthorizationGRPCHandler
+            #authuri: grpc://{{ .Values.backend.services.identity.endpoint }}/v1/Authorization/verify
+            #
       CELERY:
         mode: BEAT
         config:
           broker_url: redis://redis:6379
         schedules:
           stat_scheduler:
-            task: spaceone.statistics.tasks.stat_hourly_scheduler.stat_hour_scheduler
+            task: spaceone.statistics.task.stat_hourly_scheduler.stat_hour_scheduler
             rule_type: interval
             rule:
               period: hours
               every: 1
-
       TOKEN_INFO:
 {{ tpl (toYaml .Values.supervisor.supervisor.token) . | indent 8 }}
-
   {{- end }}
 {{- end }}
